@@ -129,12 +129,27 @@ export interface Readiness {
 /**
  * A count with no next action gets ignored, so the headline always names the
  * single most urgent thing rather than reporting a percentage.
+ *
+ * An empty Trip is special-cased. A gap is the Baseline *measured against a
+ * list*, so with no Items there is nothing to measure and `findGaps` would
+ * correctly report all 45 entries at once. Correct, and useless: the first
+ * thing a new Organiser saw was a wall of demands the group never made. An
+ * empty list is not a list with gaps — it is a list that has not started.
  */
 export function readiness(
   items: Item[],
   baseline: BaselineEntry[],
   familyGaps: FamilyGap[],
 ): Readiness {
+  if (items.length === 0) {
+    return {
+      unclaimedCount: 0,
+      gaps: [],
+      duplicates: [],
+      headline: 'הרשימה עוד ריקה. הדביקו את ההודעה מהוואטסאפ, או הוסיפו פריט ראשון.',
+    }
+  }
+
   const gaps = findGaps(items, baseline)
   const duplicates = duplicateGroups(items)
   const open = unclaimed(items)

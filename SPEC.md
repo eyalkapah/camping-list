@@ -227,6 +227,19 @@ With `anyOf` in place the detector reports exactly **one** gap against the group
 `קרח`. Ice has never been on the WhatsApp message. That single true positive is the whole
 feature justifying itself.
 
+#### An empty list has no gaps
+
+Gap detection is the Baseline measured *against a list*. On a Trip with no Items there is
+nothing to measure, and the detector correctly reports all 45 Baseline entries at once — which
+meant the first thing a new Organiser saw was `חסרים 45 דברים. הכי דחוף: מנגל.`, a wall of
+demands the group had never made. Technically true, and the exact opposite of the feature's
+purpose, which is to earn trust by only speaking when it has something real to say.
+
+An empty list is therefore special-cased in `readiness()`: no gaps, no duplicates, and a
+headline that names the next action instead — `הרשימה עוד ריקה. הדביקו את ההודעה מהוואטסאפ, או
+הוסיפו פריט ראשון.` The rule is that the Baseline is a review of a list that exists, not a
+specification a list must be born meeting.
+
 ### 4.3.1 Duplicate detection is always on
 
 Every Item carries a **merge key**. Items sharing a merge key across different Campers are
