@@ -188,3 +188,21 @@ create policy trip_admin_delete on trips for delete
 -- delete. Reading a Trip's contents still requires its code, on purpose: the
 -- super admin's job is the Trip list, not other people's snack arguments.
 
+-- Which leaves the admin unable to say how big a Trip is, and "12 campers, 114
+-- items" is exactly what distinguishes a real Trip from a test one you are
+-- about to delete. A count is an aggregate, not content, so it is served by a
+-- definer function that returns numbers and nothing else — no names, no items.
+-- Embedding `campers(count)` from the client cannot work here for two separate
+-- reasons: row-level security would return 0 for every Trip, and there are two
+-- foreign keys between trips and campers (campers.trip_id and
+-- trips.organiser_id), so PostgREST refuses the embed as ambiguous (PGRST201).
+create or replace function trip_stats()
+returns table (trip_id uuid, campers bigint, items bigint)
+language sql stable security definer set search_path = public as $$
+  select t.id,
+         (select count(*) from campers c where c.trip_id = t.id),
+         (select count(*) from items   i where i.trip_id = t.id)
+  from trips t
+  where is_super_admin()
+$$;
+

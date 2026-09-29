@@ -72,18 +72,32 @@ export async function signOut(): Promise<void> {
   await db().auth.signOut()
 }
 
-/** Every Trip, newest first, with enough counts to tell them apart. */
+/**
+ * Every Trip, newest first, with enough counts to tell them apart.
+ *
+ * The counts come from `trip_stats()` rather than an embedded `campers(count)`.
+ * Embedding fails twice over: the admin holds no Trip Code, so row-level
+ * security would report 0 for every Trip, and two foreign keys join trips to
+ * campers, so PostgREST rejects the embed as ambiguous. See `schema.sql`.
+ */
 export async function listTrips(): Promise<TripSummary[]> {
-  const { data, error } = await db()
-    .from('trips')
-    .select('*, campers(count), items(count)')
-    .order('created_at', { ascending: false })
+  const [{ data, error }, stats] = await Promise.all([
+    db().from('trips').select('*').order('created_at', { ascending: false }),
+    db().rpc('trip_stats'),
+  ])
   if (error) throw error
+  if (stats.error) throw stats.error
 
-  type Row = Record<string, unknown> & {
-    campers?: { count: number }[]
-    items?: { count: number }[]
+  const counts = new Map<string, { campers: number; items: number }>()
+  for (const s of (stats.data ?? []) as {
+    trip_id: string
+    campers: number
+    items: number
+  }[]) {
+    counts.set(s.trip_id, { campers: Number(s.campers), items: Number(s.items) })
   }
+
+  type Row = Record<string, unknown>
 
   return (data ?? []).map((row: Row) => ({
     id: row.id as string,
@@ -94,8 +108,8 @@ export async function listTrips(): Promise<TripSummary[]> {
     code: row.code as string,
     organiserId: (row.organiser_id as string | null) ?? null,
     archivedAt: (row.archived_at as string | null) ?? null,
-    campers: row.campers?.[0]?.count ?? 0,
-    items: row.items?.[0]?.count ?? 0,
+    campers: counts.get(row.id as string)?.campers ?? 0,
+    items: counts.get(row.id as string)?.items ?? 0,
   }))
 }
 
