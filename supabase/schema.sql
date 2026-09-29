@@ -110,6 +110,20 @@ create policy trip_create on trips for insert
 -- before anyone has the code; trip_is_open() covers this because the client
 -- already sends the code it just generated.
 
+-- The Organiser is recorded *after* the Trip is inserted, because Campers do
+-- not exist until the Roster does (see the organiser_id column above). That is
+-- an update on `trips`, and without this policy it silently affects zero rows:
+-- Postgres does not error, PostgREST returns 200, and the app cheerfully
+-- carries on with organiser_id null — which leaves nobody able to import.
+--
+-- `with check` repeats the code test deliberately. It is evaluated against the
+-- *new* row, so an update that changes `code` produces a row that no longer
+-- matches the header and is rejected. The Trip Code is therefore immutable
+-- without needing a trigger, and nobody holding it can lock everyone else out.
+create policy trip_update_by_code on trips for update
+  using (upper(code) = current_trip_code() and current_trip_code() <> '')
+  with check (upper(code) = current_trip_code() and current_trip_code() <> '');
+
 create policy families_by_code on families
   for all using (trip_is_open(trip_id)) with check (trip_is_open(trip_id));
 create policy campers_by_code on campers

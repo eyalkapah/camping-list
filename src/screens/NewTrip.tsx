@@ -38,6 +38,7 @@ export function NewTrip({
   const [me, setMe] = useState<string | null>(null)
   const [copied, setCopied] = useState<'link' | 'code' | null>(null)
   const [busy, setBusy] = useState(false)
+  const [organiserFailed, setOrganiserFailed] = useState(false)
 
   const parsed = useMemo(() => parseMessage(pasted), [pasted])
   const isMessage = parsed.people.length > 0
@@ -103,13 +104,23 @@ export function NewTrip({
               className={me === c.id ? 'name on' : 'name'}
               onClick={() => {
                 setMe(c.id)
-                void repo.setOrganiser(created.tripId, c.id)
+                repo.setOrganiser(created.tripId, c.id).then(
+                  () => setOrganiserFailed(false),
+                  () => setOrganiserFailed(true),
+                )
               }}
             >
               {c.name}
             </button>
           ))}
         </div>
+
+        {organiserFailed && (
+          <p className="warn small">
+            לא הצלחנו לשמור מי מנהל את הטיול. נסו לבחור שוב — בלי זה לא תוכלו להוסיף רשימה
+            מהוואטסאפ.
+          </p>
+        )}
 
         <p className="lede" style={{ marginTop: 22 }}>
           שלחו את הקישור לקבוצה. מי שילחץ עליו ייכנס בלי להקליד כלום — הקוד כבר בתוכו.

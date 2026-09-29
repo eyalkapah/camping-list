@@ -316,7 +316,17 @@ export const supabaseRepo: Repo = {
     }
   },
   async setOrganiser(tripId, camperId) {
-    await activeClient().from('trips').update({ organiser_id: camperId }).eq('id', tripId)
+    // A row-level security denial on UPDATE is not an error: Postgres matches
+    // no rows, PostgREST returns 200, and the write vanishes. So check the
+    // affected rows rather than just `error`, or the next missing policy will
+    // be just as invisible as this one was.
+    const { data, error } = await activeClient()
+      .from('trips')
+      .update({ organiser_id: camperId })
+      .eq('id', tripId)
+      .select('id')
+    if (error) throw error
+    if (!data?.length) throw new Error('setOrganiser changed nothing (row-level security?)')
   },
   async setFamilyCheck(tripId, familyId, obligationId, confirmed) {
     if (confirmed) {
