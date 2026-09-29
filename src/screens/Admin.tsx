@@ -162,7 +162,11 @@ export function Admin({ onExit }: { onExit: () => void }) {
           ) : (
             <>
               <p className="muted small import-note">
-                {trip.location || '—'} · {trip.startsOn}–{trip.endsOn} · {trip.campers} משתתפים
+                {trip.location || '—'} ·{' '}
+                <bdi dir="ltr">
+                  {trip.startsOn}–{trip.endsOn}
+                </bdi>{' '}
+                · {trip.campers} משתתפים
                 · {trip.items} פריטים
               </p>
               <div className="import-actions">

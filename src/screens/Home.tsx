@@ -10,6 +10,7 @@ import {
   readiness,
 } from '../domain/list'
 import { parseSingleItem } from '../domain/parse'
+import { formatDateRange } from '../domain/dates'
 import type { CategoryId, Item } from '../domain/types'
 
 /**
@@ -69,7 +70,8 @@ export function Home({
       <header className="trip-head">
         <h1>{trip.name}</h1>
         <p className="muted small">
-          {trip.location} · {trip.startsOn.slice(8)}–{trip.endsOn.slice(8)}/{trip.startsOn.slice(5, 7)}
+          {trip.location} ·{' '}
+          <bdi dir="ltr">{formatDateRange(trip.startsOn, trip.endsOn)}</bdi>
         </p>
       </header>
 
