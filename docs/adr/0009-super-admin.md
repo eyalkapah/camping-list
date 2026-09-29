@@ -61,3 +61,20 @@ the narrower power is the one worth having.
   without it, 496 kB / 138 kB with it. Worth knowing before blaming Pages.
 - With no Supabase project configured the screen says so plainly rather than
   pretending to be a login.
+
+**Amended, after running it against a real project.** The admin was given no way
+to read a Trip's contents, and that stands. But it left the Trip list unable to
+say how big a Trip is, and "12 campers, 114 items" versus "0 and 0" is exactly
+what separates a real Trip from a test one about to be deleted.
+
+A count is an aggregate, not content, so `trip_stats()` serves them: a
+`security definer` function gated on `is_super_admin()` that returns trip id and
+two numbers, and nothing else. No names, no items, no roster.
+
+The original attempt — embedding `campers(count)` from the client — could never
+have worked, and failed in the more useful of the two available ways. It errored
+with PGRST201, because `campers.trip_id` and `trips.organiser_id` are both
+foreign keys between the same pair of tables and PostgREST will not guess. Had
+that embed been unambiguous it would have returned `0` for every Trip instead,
+since the admin holds no Trip Code and row-level security would have filtered
+the rows away without complaint. A loud error was the lucky outcome.

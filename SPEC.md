@@ -321,6 +321,8 @@ identity to gate on.
 
 Two limits are deliberate. A super admin **cannot read a Trip's contents**: the by-code policies
 still govern items, campers and checks, so the admin sees names, dates, codes and counts only.
+The counts are aggregates from a `security definer` function gated on `is_super_admin()`, not a
+relaxation of those policies — the admin learns that a Trip holds 114 Items, never what they are.
 And admins **cannot promote admins**: `super_admins` has a select policy and no insert policy, so
 membership changes only through the dashboard's service role.
 
