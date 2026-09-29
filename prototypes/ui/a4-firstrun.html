@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"><title>A4 — כניסה ראשונה</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ---------- A: מסך אחד ---------- */
+.vA{padding:34px 24px;background:#fff;min-height:100%}
+.vA h1{font-size:24px;margin:0 0 6px}
+.vA p.s{color:var(--muted);font-size:14px;margin:0 0 26px;line-height:1.6}
+.vA label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:16px 0 6px}
+.vA input,.vA select{width:100%;border:1px solid var(--line);border-radius:11px;padding:13px 14px;
+  font:inherit;font-size:16px;background:#fff}
+.vA .go{width:100%;margin-top:24px;background:var(--accent);color:#fff;border:0;border-radius:11px;
+  padding:15px;font:inherit;font-size:16px;font-weight:600;cursor:pointer}
+.vA .fine{font-size:12px;color:var(--faint);margin-top:16px;line-height:1.6}
+
+/* ---------- B: שני שלבים גדולים ---------- */
+.vB{min-height:100%;display:flex;flex-direction:column;background:#fff}
+.vB .prog{display:flex;gap:6px;padding:20px 24px 0}
+.vB .prog i{flex:1;height:3px;border-radius:99px;background:#eae6df}
+.vB .prog i.on{background:var(--accent)}
+.vB .body{flex:1;padding:36px 26px;display:flex;flex-direction:column;justify-content:center}
+.vB h1{font-size:28px;margin:0 0 10px;line-height:1.3}
+.vB p{color:var(--muted);font-size:15px;line-height:1.65;margin:0 0 30px}
+.vB .code{display:flex;gap:8px;direction:ltr;justify-content:center}
+.vB .code span{width:44px;height:56px;border:2px solid var(--line);border-radius:11px;
+  display:grid;place-items:center;font-size:24px;font-weight:700}
+.vB .code span.f{border-color:var(--accent);background:var(--accent-soft)}
+.vB .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:26px}
+.vB .pad button{padding:15px;font:inherit;font-size:19px;border:1px solid var(--line);
+  border-radius:11px;background:#fff;cursor:pointer}
+.vB .names{display:flex;flex-direction:column;gap:8px}
+.vB .names button{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--line);
+  border-radius:12px;background:#fff;font:inherit;font-size:16px;cursor:pointer;text-align:start}
+.vB .foot{padding:0 26px 26px}
+
+/* ---------- C: קישור + רשת פרצופים ---------- */
+.vC{min-height:100%;background:linear-gradient(160deg,#0f6b4f,#134e3c);color:#fff;
+  padding:30px 22px;display:flex;flex-direction:column}
+.vC .tag{font-size:12px;opacity:.75;letter-spacing:.5px}
+.vC h1{font-size:26px;margin:6px 0 4px}
+.vC .sub{opacity:.8;font-size:14px;margin-bottom:8px}
+.vC .ok{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);
+  border-radius:99px;padding:6px 13px;font-size:12.5px;margin-bottom:26px;align-self:flex-start}
+.vC .ask{font-size:16px;margin-bottom:14px}
+.vC .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.vC .p{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:14px;
+  padding:14px 8px;text-align:center;cursor:pointer}
+.vC .p.on{background:#fff;color:var(--ink)}
+.vC .p .av{width:36px;height:36px;border-radius:99px;margin:0 auto 7px;display:grid;
+  place-items:center;font-weight:700;color:#fff;font-size:14px}
+.vC .p span{font-size:13px}
+.vC .cta{margin-top:auto;padding-top:22px}
+.vC .cta button{width:100%;background:#fff;color:var(--accent);border:0;border-radius:12px;
+  padding:15px;font:inherit;font-size:16px;font-weight:700;cursor:pointer}
+.vC .cta button:disabled{opacity:.4}
+</style>
+</head>
+<body>
+<div class="proto-head">
+  <h1>A4 · כניסה ראשונה</h1>
+  <p class="qq">השאלה: האם הסבתא של הקבוצה נכנסת מקישור בוואטסאפ בלי לשאול אף אחד?</p>
+  <p>אם זה נכשל, כל השאר לא משנה.</p>
+</div>
+<div id="app"></div>
+
+<script src="data.js"></script>
+<script src="proto.js"></script>
+<script>
+let step = 0, code = '', picked = null;
+
+/* ============ A · מסך אחד ============ */
+function varA() {
+  return `<div class="vA">
+    <div style="font-size:30px;margin-bottom:12px">⛺</div>
+    <h1>קמפינג</h1>
+    <p class="s">הזינו את קוד הטיול מהקבוצה, ובחרו את השם שלכם.
+      אין הרשמה, אין סיסמה, אין אימייל.</p>
+    <label>קוד הטיול</label>
+    <input placeholder="BSOR26" value="${code}" oninput="code=this.value;">
+    <label>מי אתם?</label>
+    <select onchange="picked=this.value">
+      <option value="">בחרו מהרשימה…</option>
+      ${CAMP.campers.map(c => `<option ${picked === c.n ? 'selected' : ''}>${c.n}</option>`).join('')}
+    </select>
+    <button class="go">כניסה</button>
+    <p class="fine">הכול במסך אחד: הכי מהיר למי שכבר יודע מה הוא עושה.
+      אבל תפריט נפתח עם 11 שמות הוא בדיוק מה שמבלבל במכשיר לא מוכר,
+      ושדה ריק עם קוד באנגלית הוא מקום נוח להיתקע בו.</p>
+  </div>`;
+}
+
+/* ============ B · שני שלבים ============ */
+function varB() {
+  const digits = 'BSOR26';
+  if (step === 0) {
+    return `<div class="vB">
+      <div class="prog"><i class="on"></i><i></i></div>
+      <div class="body">
+        <h1>הקוד מהקבוצה</h1>
+        <p>שישה תווים שנשלחו בוואטסאפ. זה כל מה שצריך כדי להיכנס.</p>
+        <div class="code">${digits.split('').map((d, i) =>
+          `<span class="${i < code.length ? 'f' : ''}">${code[i] || ''}</span>`).join('')}</div>
+        <div class="pad">
+          ${digits.split('').map(d => `<button onclick="code+='${d}';repaint()">${d}</button>`).join('')}
+          <button onclick="code=code.slice(0,-1);repaint()">⌫</button>
+          <button onclick="code='';repaint()">נקה</button>
+          <button class="" style="background:var(--accent);color:#fff;border-color:var(--accent)"
+            onclick="if(code.length)step=1;repaint()">המשך</button>
+        </div>
+      </div></div>`;
+  }
+  return `<div class="vB">
+    <div class="prog"><i class="on"></i><i class="on"></i></div>
+    <div class="body">
+      <h1>מי אתם?</h1>
+      <p>בחרו את עצמכם מהרשימה. אפשר לשנות אחר כך.</p>
+      <div class="names">
+        ${CAMP.campers.slice(0, 6).map(c => `<button onclick="picked='${c.n}';repaint()"
+          style="${picked === c.n ? 'border-color:var(--accent);background:var(--accent-soft)' : ''}">
+          ${A(c.n)}<span>${c.n}</span></button>`).join('')}
+        <button class="muted">… עוד ${CAMP.campers.length - 6} שמות</button>
+      </div>
+    </div>
+    <div class="foot"><button class="btn p" style="width:100%;padding:15px;font-size:16px"
+      ${picked ? '' : 'disabled'}>${picked ? `כניסה כ${picked}` : 'בחרו שם'}</button>
+      <div class="tiny muted" style="margin-top:10px;text-align:center">
+        <a href="#" onclick="step=0;repaint();return false" style="color:var(--muted)">חזרה לקוד</a></div>
+    </div></div>`;
+}
+
+/* ============ C · קישור + פרצופים ============ */
+function varC() {
+  return `<div class="vC">
+    <div class="tag">הוזמנתם לטיול</div>
+    <h1>${CAMP.trip.name}</h1>
+    <div class="sub">${CAMP.trip.dates} · 11 משפחות</div>
+    <div class="ok">✓ הקוד כבר מולא מהקישור</div>
+    <div class="ask">רק תגידו מי אתם</div>
+    <div class="grid">
+      ${CAMP.campers.map(c => `<div class="p ${picked === c.n ? 'on' : ''}"
+        onclick="picked='${c.n}';repaint()">
+        <div class="av" style="background:${c.c}">${c.n[0]}</div><span>${c.n}</span></div>`).join('')}
+    </div>
+    <div class="cta">
+      <button ${picked ? '' : 'disabled'}>${picked ? `זה אני, ${picked}` : 'בחרו את עצמכם'}</button>
+      <div class="tiny" style="opacity:.6;margin-top:12px;text-align:center">
+        אין קוד להקליד, אין מקלדת, אין אנגלית. הסיכון: כל מי שמקבל את הקישור נכנס —
+        וזו בדיוק ההחלטה שקיבלנו ב־ADR-2.</div>
+    </div></div>`;
+}
+
+window.VARIANTS = [
+  { key: 'A', name: 'מסך אחד', render: varA },
+  { key: 'B', name: 'שני שלבים מודרכים', render: varB },
+  { key: 'C', name: 'קישור + פרצופים', render: varC }
+];
+mountPrototype();
+</script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"><title>A2 — מוכנות: מה חסר</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ---------- A: תג מספר שקט בתוך הכותרת ---------- */
+.vA .top{background:var(--card);padding:16px 18px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:12px}
+.vA .badge{background:var(--warn);color:#fff;border-radius:99px;min-width:30px;height:30px;
+  display:grid;place-items:center;font-weight:700;font-size:14px}
+.vA .strip{display:flex;gap:8px;padding:12px 16px;overflow-x:auto}
+.vA .strip::-webkit-scrollbar{height:0}
+.vA .mini{flex:0 0 auto;background:#fff;border:1px solid var(--line);border-radius:10px;
+  padding:9px 13px;font-size:13px}
+.vA .mini b{display:block;font-size:19px}
+.vA .sec{padding:4px 16px 16px}
+.vA .it{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+  margin-bottom:7px;display:flex;align-items:center;gap:10px;font-size:14px}
+
+/* ---------- B: טבעת התקדמות ---------- */
+.vB{background:linear-gradient(#fff,var(--bg) 300px)}
+.vB .hero{text-align:center;padding:26px 20px 14px}
+.vB svg{transform:rotate(-90deg)}
+.vB .num{font-size:40px;font-weight:700;line-height:1}
+.vB .lbl{color:var(--muted);font-size:14px;margin-top:2px}
+.vB .cta{margin:16px 20px 8px;background:var(--warn);color:#fff;border-radius:14px;padding:14px 16px;
+  display:flex;align-items:center;gap:12px}
+.vB .cta b{font-size:15px}
+.vB .cta .btn{background:#fff;border:0;font-weight:600;color:var(--warn)}
+.vB .card{background:#fff;margin:0 20px 10px;border-radius:14px;padding:14px 16px;
+  border:1px solid var(--line)}
+.vB .card h3{margin:0 0 8px;font-size:14px}
+.vB .li{display:flex;gap:9px;padding:6px 0;font-size:14px;align-items:center}
+
+/* ---------- C: רמזור לפי קטגוריה ---------- */
+.vC .hd{padding:16px 18px 8px}
+.vC .grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:6px 16px 16px}
+.vC .tile{background:#fff;border-radius:13px;padding:13px;border:1px solid var(--line);
+  position:relative;overflow:hidden}
+.vC .tile .dot{width:9px;height:9px;border-radius:99px;display:inline-block;margin-inline-end:6px}
+.vC .tile .big{font-size:15px;font-weight:600;margin:6px 0 2px}
+.vC .tile .fill{position:absolute;inset:auto 0 0 0;height:4px}
+.vC .legend{display:flex;gap:14px;padding:0 18px 14px;font-size:12px;color:var(--muted)}
+.vC .why{margin:0 16px 18px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px}
+
+/* ---------- D: משפט אחד, בלי קישוטים ---------- */
+.vD{background:#fff;padding:26px 22px}
+.vD h1{font-size:25px;line-height:1.35;margin:0 0 4px;font-weight:600}
+.vD h1 em{font-style:normal;color:var(--warn)}
+.vD p.sub{color:var(--muted);font-size:14px;margin:0 0 26px}
+.vD .g{font-size:12px;font-weight:700;color:var(--faint);letter-spacing:.5px;margin:22px 0 8px}
+.vD .ln{display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px solid #f0ede7;
+  font-size:16px}
+.vD .ln .take{margin-inline-start:auto;font-size:13px;color:var(--accent);font-weight:600;cursor:pointer}
+.vD .quiet{color:var(--muted);font-size:13.5px;margin-top:26px;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="proto-head">
+  <h1>A2 · מוכנות — "מה חסר"</h1>
+  <p class="qq">השאלה: איזו צורה גורמת לאנשים לפעול, ולא למשוך בכתפיים?</p>
+  <p>אותם 6 פריטים חסרים ואותן 3 משפחות בפיגור, בארבע רמות של עוצמה.</p>
+</div>
+<div id="app"></div>
+
+<script src="data.js"></script>
+<script src="proto.js"></script>
+<script>
+const claimed = CAMP.items.filter(i => i.by).length;
+const pct = Math.round(claimed / CAMP.items.length * 100);
+const fam = CAMP.familyOutstanding;
+
+/* ============ A · תג שקט ============ */
+function varA() {
+  return `<div class="vA">
+    <div class="top">
+      <div style="flex:1"><div style="font-weight:600;font-size:16px">${CAMP.trip.name}</div>
+        <div class="tiny muted">${CAMP.trip.dates}</div></div>
+      <div class="badge">${CAMP.missing.length}</div>
+    </div>
+    <div class="strip">
+      <div class="mini"><b>${CAMP.items.length}</b><span class="muted tiny">פריטים</span></div>
+      <div class="mini" style="border-color:#f0d9c4"><b style="color:var(--warn)">${CAMP.missing.length}</b>
+        <span class="muted tiny">אף אחד לא לקח</span></div>
+      <div class="mini"><b>${CAMP.dupGroups.length}</b><span class="muted tiny">כפילויות</span></div>
+      <div class="mini"><b>${fam.length}</b><span class="muted tiny">משפחות בפיגור</span></div>
+    </div>
+    <div class="sec">
+      <div class="tiny muted" style="margin:6px 2px">חסר</div>
+      ${CAMP.missing.map(i => `<div class="it">
+        <div class="avatar" style="background:var(--warn-soft);color:var(--warn)">?</div>
+        <span style="flex:1">${i.n}</span><button class="btn">אני אביא</button></div>`).join('')}
+    </div>
+    <div style="padding:0 18px 30px" class="tiny muted">
+      המספר יושב בכותרת ולא מפריע. מי שלא מסתכל — לא יראה.
+    </div></div>`;
+}
+
+/* ============ B · טבעת ============ */
+function varB() {
+  const r = 58, C = 2 * Math.PI * r;
+  return `<div class="vB">
+    <div class="hero">
+      <svg width="150" height="150" viewBox="0 0 150 150">
+        <circle cx="75" cy="75" r="${r}" fill="none" stroke="#e8e4dc" stroke-width="13"/>
+        <circle cx="75" cy="75" r="${r}" fill="none" stroke="var(--accent)" stroke-width="13"
+          stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - pct / 100)}"/>
+      </svg>
+      <div style="margin-top:-96px"><div class="num">${pct}%</div>
+        <div class="lbl">מהרשימה מכוסה</div></div>
+      <div style="height:42px"></div>
+      <div class="tiny muted">${CAMP.trip.name} · עוד 13 ימים</div>
+    </div>
+    <div class="cta">
+      <div style="flex:1"><b>${CAMP.missing.length} פריטים בלי אף אחד</b>
+        <div style="font-size:12.5px;opacity:.9">קרח, נייר טואלט, פותחן, עזרה ראשונה, פנס…</div></div>
+      <button class="btn">הצג</button>
+    </div>
+    <div class="card"><h3>${fam.length} משפחות לא אישרו את הציוד שלהן</h3>
+      ${fam.slice(0, 3).map(f => `<div class="li">${A(f.family)}
+        <span style="flex:1">${f.family}</span>
+        <span class="chip w">${f.total - f.done} פריטים</span></div>`).join('')}
+    </div>
+    <div class="card"><h3>${CAMP.dupGroups.length} דברים שיותר מאדם אחד מביא</h3>
+      <div class="tiny muted">קולה זירו ×4 · פרגיות ×2 · יין ×2 · טחינה ×2 · לחם ×2 · פירות ×2</div>
+    </div>
+    <div style="height:30px"></div></div>`;
+}
+
+/* ============ C · רמזור קטגוריות ============ */
+function varC() {
+  const tiles = CAMP.cats.map(c => {
+    const its = CAMP.byCat(c.n); if (!its.length) return '';
+    const miss = its.filter(i => !i.by).length;
+    const dup = its.filter(i => i.dup).length;
+    const col = miss ? 'var(--warn)' : dup ? '#c9a227' : 'var(--ok)';
+    const txt = miss ? `${miss} חסרים` : dup ? `${dup} כפולים` : 'מכוסה';
+    return `<div class="tile">
+      <div class="tiny muted"><span class="dot" style="background:${col}"></span>${c.i} ${c.n}</div>
+      <div class="big" style="color:${col}">${txt}</div>
+      <div class="tiny muted">${its.length} פריטים</div>
+      <div class="fill" style="background:${col};opacity:.5"></div></div>`;
+  }).join('');
+  return `<div class="vC">
+    <div class="hd"><div style="font-weight:600;font-size:17px">מצב הקטגוריות</div>
+      <div class="tiny muted">מה מוכן, מה לא — לפי מדף בסופר</div></div>
+    <div class="legend"><span><span class="dot" style="background:var(--ok);width:9px;height:9px;
+      border-radius:99px;display:inline-block"></span> מכוסה</span>
+      <span><span class="dot" style="background:#c9a227;width:9px;height:9px;border-radius:99px;
+      display:inline-block"></span> כפילות</span>
+      <span><span class="dot" style="background:var(--warn);width:9px;height:9px;border-radius:99px;
+      display:inline-block"></span> חסר</span></div>
+    <div class="grid">${tiles}</div>
+    <div class="why"><div style="font-weight:600;margin-bottom:6px">למה זה אדום</div>
+      <div class="tiny muted">״ציוד מטבח״ אדום כי אין פותחן קופסאות ואין ערכת עזרה ראשונה.
+        שניהם מופיעים ברשימת הבסיס של הקבוצה ואף אחד לא לקח אותם.</div></div>
+    <div style="height:20px"></div></div>`;
+}
+
+/* ============ D · משפט אחד ============ */
+function varD() {
+  return `<div class="vD">
+    <h1>חסרים <em>${CAMP.missing.length} דברים</em>, ו־<em>${fam.length} משפחות</em>
+      עוד לא אישרו את הציוד שלהן.</h1>
+    <p class="sub">${CAMP.trip.name} · ${CAMP.trip.dates}</p>
+
+    <div class="g">אף אחד לא לקח</div>
+    ${CAMP.missing.map(i => `<div class="ln"><span>${i.n}</span>
+      ${i.q ? `<span class="muted tiny">${i.q}</span>` : ''}
+      <span class="take">אני אביא</span></div>`).join('')}
+
+    <div class="g">לא אישרו ציוד משפחתי</div>
+    ${fam.map(f => `<div class="ln"><span>${f.family}</span>
+      <span class="muted tiny">${f.total - f.done} מתוך ${f.total}</span>
+      <span class="take">תזכורת</span></div>`).join('')}
+
+    <div class="quiet">בלי טבעות, בלי אחוזים, בלי רמזור. רק המשפט ואז הרשימה.
+      המספרים היפים נעימים להסתכל עליהם, אבל מה שמניע אנשים זה לראות את השם של הדבר החסר.</div>
+    <div style="height:30px"></div></div>`;
+}
+
+window.VARIANTS = [
+  { key: 'A', name: 'תג מספר שקט', render: varA },
+  { key: 'B', name: 'טבעת התקדמות', render: varB },
+  { key: 'C', name: 'רמזור קטגוריות', render: varC },
+  { key: 'D', name: 'משפט אחד', render: varD }
+];
+mountPrototype();
+</script>
+</body>
+</html>

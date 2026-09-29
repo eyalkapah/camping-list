@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"><title>A5 — ציוד משפחתי</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ---------- A: מטריצה ---------- */
+.vA .hd{padding:15px 16px 8px}
+.vA table{width:100%;border-collapse:collapse;font-size:12px}
+.vA th{font-weight:600;color:var(--muted);font-size:10.5px;padding:0 0 8px;
+  writing-mode:vertical-rl;transform:rotate(180deg);height:78px;white-space:nowrap}
+.vA th.f{writing-mode:horizontal-tb;transform:none;text-align:start;padding-inline-start:16px;
+  font-size:12px;height:auto;vertical-align:bottom}
+.vA td{text-align:center;padding:4px 0;border-top:1px solid #f0ede7}
+.vA td.f{text-align:start;padding-inline-start:16px;font-size:13px;white-space:nowrap}
+.vA .m{width:19px;height:19px;border-radius:5px;display:inline-block}
+.vA .m.y{background:var(--ok)}
+.vA .m.n{background:#f0d9c4}
+.vA .legend{padding:12px 16px 20px;font-size:12px;color:var(--muted);line-height:1.7}
+
+/* ---------- B: שורות עם התקדמות ---------- */
+.vB .hd{padding:16px 18px 6px;display:flex;align-items:center;gap:10px}
+.vB .tog{margin-inline-start:auto;font-size:12.5px;border:1px solid var(--line);background:#fff;
+  border-radius:99px;padding:5px 12px;cursor:pointer;font-family:inherit}
+.vB .tog.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.vB .row{display:flex;align-items:center;gap:11px;padding:12px 18px;background:#fff;
+  border-bottom:1px solid #f2efe9}
+.vB .row .n{flex:1;font-size:14.5px}
+.vB .pbar{width:74px;height:6px;border-radius:99px;background:#eceae5;overflow:hidden}
+.vB .pbar i{display:block;height:100%;background:var(--accent)}
+.vB .row.full .pbar i{background:var(--ok)}
+.vB .nudge{background:transparent;border:0;color:var(--accent);font:inherit;font-size:12.5px;
+  font-weight:600;cursor:pointer}
+.vB .note{padding:14px 18px;font-size:12.5px;color:var(--muted);line-height:1.7}
+
+/* ---------- C: המשפחה שלי בגדול ---------- */
+.vC{background:#fff}
+.vC .mine{padding:22px 20px 14px}
+.vC h1{font-size:21px;margin:0 0 3px}
+.vC .sub{color:var(--muted);font-size:13.5px;margin-bottom:18px}
+.vC .task{display:flex;align-items:center;gap:13px;padding:14px 0;border-bottom:1px solid #f2efe9;
+  cursor:pointer;font-size:16px}
+.vC .bx{width:26px;height:26px;border:2px solid var(--line);border-radius:8px;flex:0 0 auto;
+  display:grid;place-items:center;color:#fff;font-size:14px}
+.vC .task.on .bx{background:var(--accent);border-color:var(--accent)}
+.vC .task.on{color:var(--faint)}
+.vC .others{margin:20px;background:var(--bg);border-radius:14px;padding:15px 16px}
+.vC .others h3{margin:0 0 8px;font-size:13.5px}
+.vC .av-row{display:flex;gap:-4px;margin-bottom:8px}
+.vC .av-row .avatar{margin-inline-end:-8px;border:2px solid var(--bg)}
+</style>
+</head>
+<body>
+<div class="proto-head">
+  <h1>A5 · ציוד באחריות כל משפחה</h1>
+  <p class="qq">השאלה: איך דוחפים את שלוש המשפחות שלא אישרו מים — בלי לבייש אותן מול כולם?</p>
+  <p>11 משפחות × 5 חובות. שאלת עיצוב חברתית, לא שאלת פריסה.</p>
+</div>
+<div id="app"></div>
+
+<script src="data.js"></script>
+<script src="proto.js"></script>
+<script>
+let onlyOpen = false;
+const mineState = [...CAMP.familyState[CAMP.me]];
+
+/* ============ A · מטריצה ============ */
+function varA() {
+  return `<div class="vA">
+    <div class="hd"><div style="font-weight:600;font-size:16px">ציוד משפחתי</div>
+      <div class="tiny muted">כל משפחה מביאה לעצמה</div></div>
+    <table>
+      <tr><th class="f">משפחה</th>
+        ${CAMP.familyObligations.map(o => `<th>${o}</th>`).join('')}</tr>
+      ${Object.entries(CAMP.familyState).map(([f, v]) => `<tr>
+        <td class="f">${f}</td>
+        ${v.map(x => `<td><span class="m ${x ? 'y' : 'n'}"></span></td>`).join('')}
+      </tr>`).join('')}
+    </table>
+    <div class="legend">הכי צפוף והכי מדויק — אפשר לראות בבת אחת שרות ואלכס כמעט לא סימנו כלום.
+      וזו בדיוק הבעיה: זו לוח תוצאות ציבורי, וקל לדמיין את ההודעה הנעלבת בקבוצה.</div>
+  </div>`;
+}
+
+/* ============ B · שורות + מיקוד בפיגור ============ */
+function varB() {
+  const rows = Object.entries(CAMP.familyState)
+    .map(([f, v]) => ({ f, done: v.filter(Boolean).length, total: v.length, v }))
+    .filter(r => !onlyOpen || r.done < r.total)
+    .sort((a, b) => a.done - b.done);
+  return `<div class="vB">
+    <div class="hd"><div><div style="font-weight:600;font-size:16px">ציוד משפחתי</div>
+      <div class="tiny muted">${CAMP.familyOutstanding.length} משפחות עוד לא סיימו</div></div>
+      <button class="tog ${onlyOpen ? 'on' : ''}" onclick="onlyOpen=!onlyOpen;repaint()">
+        ${onlyOpen ? 'הצג את כולן' : 'רק מי שחסר'}</button></div>
+    ${rows.map(r => `<div class="row ${r.done === r.total ? 'full' : ''}">
+      ${A(r.f)}
+      <span class="n">${r.f}
+        ${r.done < r.total ? `<div class="tiny muted">חסר: ${
+          r.v.map((x, i) => x ? null : CAMP.familyObligations[i]).filter(Boolean).join(', ')}</div>` : ''}</span>
+      <span class="pbar"><i style="width:${r.done / r.total * 100}%"></i></span>
+      ${r.done < r.total ? '<button class="nudge">תזכורת</button>' : '<span class="chip a">הכול</span>'}
+    </div>`).join('')}
+    <div class="note">מסודר לפי מי הכי בפיגור, עם כפתור תזכורת פרטי לכל משפחה.
+      התזכורת נשלחת מהמארגן ולא מהאפליקציה — מה שמשאיר בן אדם באמצע,
+      וזו ההחלטה שקיבלנו כשוויתרנו על התראות.</div>
+  </div>`;
+}
+
+/* ============ C · קודם שלי, אחר כך שקט ============ */
+function varC() {
+  const done = mineState.filter(Boolean).length;
+  const others = CAMP.familyOutstanding.filter(f => f.family !== CAMP.me);
+  return `<div class="vC">
+    <div class="mine">
+      <h1>הציוד של ${CAMP.me}</h1>
+      <div class="sub">${done} מתוך ${mineState.length} · באחריותכם, לא של הקבוצה</div>
+      ${CAMP.familyObligations.map((o, i) => `<div class="task ${mineState[i] ? 'on' : ''}"
+        onclick="mineState[${i}]=mineState[${i}]?0:1;repaint()">
+        <div class="bx">${mineState[i] ? '✓' : ''}</div><span>${o}</span></div>`).join('')}
+    </div>
+    <div class="others">
+      <h3>בקבוצה</h3>
+      <div class="av-row">${others.slice(0, 6).map(f => A(f.family)).join('')}</div>
+      <div class="tiny muted">${others.length} משפחות עוד לא אישרו את הציוד שלהן.
+        השמות לא מוצגים — אם זה חשוב, המארגן יכול לשלוח תזכורת כללית לקבוצה.</div>
+      <button class="btn" style="margin-top:11px">שלח תזכורת כללית</button>
+    </div>
+    <div style="padding:0 20px 26px" class="tiny muted">
+      הכי פחות לוחץ: אתם רואים רק את עצמכם, והמספר של האחרים אנונימי.
+      המחיר — אי אפשר לדעת שדווקא רות לא הביאה מים, וזה בדיוק מה שהמארגן רוצה לדעת.</div>
+  </div>`;
+}
+
+window.VARIANTS = [
+  { key: 'A', name: 'מטריצה', render: varA },
+  { key: 'B', name: 'שורות + תזכורת', render: varB },
+  { key: 'C', name: 'שלי בגדול, האחרים אנונימיים', render: varC }
+];
+mountPrototype();
+</script>
+</body>
+</html>

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>אב־טיפוס — ייבוא רשימת וואטסאפ</title>
+<style>
+  :root{
+    --ink:#1b1b1a; --muted:#6c6a66; --line:#e2ded7; --bg:#faf8f5; --card:#fff;
+    --accent:#0f6b4f; --accent-soft:#e8f1ed; --warn:#b4541a; --warn-soft:#fdf0e6;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font-family:"Segoe UI",Arial,sans-serif;line-height:1.65;font-size:15px}
+  .wrap{max-width:1040px;margin:0 auto;padding:40px 24px 120px}
+  h1{font-size:28px;margin:0 0 6px;letter-spacing:-.3px}
+  h2{font-size:19px;margin:44px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:15px;margin:0 0 8px}
+  .lede{color:var(--muted);max-width:70ch;margin:0 0 4px}
+  .q{background:var(--accent-soft);border-inline-start:3px solid var(--accent);
+     padding:14px 18px;margin:22px 0;border-radius:0 6px 6px 0}
+  .q strong{color:var(--accent)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+  .stat .n{font-size:26px;font-weight:600;line-height:1.2}
+  .stat .l{font-size:12px;color:var(--muted)}
+  .stat.hot .n{color:var(--warn)}
+  button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);
+         color:var(--ink);border-radius:6px;padding:6px 12px}
+  button:hover{border-color:var(--accent);color:var(--accent)}
+  button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  button.primary:hover{opacity:.88;color:#fff}
+  button:disabled{opacity:.4;cursor:default}
+  .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0}
+  .row{display:flex;gap:12px;align-items:flex-start;padding:9px 12px;border:1px solid var(--line);
+       border-radius:7px;background:var(--card);margin-bottom:6px}
+  .row.flagged{background:var(--warn-soft);border-color:#f0d9c4}
+  .row.accepted{opacity:.55}
+  .row.rejected{opacity:.35;text-decoration:line-through}
+  .row.merged{display:none}
+  .row .body{flex:1;min-width:0}
+  .name{font-weight:600}
+  .meta{font-size:12.5px;color:var(--muted)}
+  .tag{display:inline-block;font-size:11.5px;padding:1px 7px;border-radius:99px;
+       background:#f1eee9;color:var(--muted);margin-inline-start:5px}
+  .tag.f{background:#f6dfc9;color:var(--warn)}
+  .tag.c{background:var(--accent-soft);color:var(--accent)}
+  .owner{font-size:12.5px;color:var(--accent);font-weight:600;min-width:52px}
+  .acts{display:flex;gap:5px;flex-shrink:0}
+  .acts button{padding:3px 9px;font-size:12.5px}
+  .group{border:1px solid var(--line);border-radius:7px;padding:12px;margin-bottom:8px;background:var(--card)}
+  .group.resolved{opacity:.5}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tabs button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .step{display:flex;gap:10px;align-items:center;margin-bottom:7px}
+  .step .i{width:22px;height:22px;border-radius:99px;background:#f1eee9;color:var(--muted);
+           font-size:12px;display:grid;place-items:center;flex-shrink:0}
+  .step.done .i{background:var(--accent);color:#fff}
+  .step.now .i{background:var(--warn);color:#fff}
+  .note{font-size:13px;color:var(--muted);margin:0 0 12px}
+  pre{background:#f4f1ec;border:1px solid var(--line);border-radius:7px;padding:14px;
+      overflow:auto;font-size:12.5px;direction:ltr;text-align:left;white-space:pre-wrap}
+  details{margin-top:10px}
+  summary{cursor:pointer;color:var(--accent);font-size:14px}
+  .banner{background:#2b2926;color:#e9e5de;padding:9px 16px;border-radius:7px;
+          font-size:13px;margin-bottom:26px}
+  .flash{font-size:13px;color:var(--warn);min-height:20px;margin:6px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="banner">אב־טיפוס לזריקה · לא קוד מוצר · נועד לענות על שאלה אחת ואז להימחק</div>
+
+  <h1>ייבוא רשימת הוואטסאפ</h1>
+  <p class="lede">המסך שבו מארגן מדביק את ההודעה מהקבוצה, והאפליקציה מציעה ממנה פריטים.</p>
+
+  <div class="q">
+    <strong>השאלה שהאב־טיפוס הזה עונה עליה:</strong>
+    האם מודל שפה מצליח לפרק את ההודעה האמיתית שלכם לפריטים מובְנים בדיוק מספיק,
+    כדי שאימוץ האפליקציה יהיה הדבקה אחת ולא ערב שלם של הקלדה?
+    ואם לא — <em>אילו</em> טעויות הוא עושה, וכמה עבודה ידנית הן משאירות במסך האישור?
+    <br><br>
+    הנתונים כאן הם פלט אמיתי של פירוק ההודעה שלכם, על כל 11 השורות. שום דבר לא הומצא ולא יוּפָּה.
+  </div>
+
+  <h2>מצב הייבוא</h2>
+  <div class="grid" id="stats"></div>
+  <div class="flash" id="flash"></div>
+
+  <h2>הצעות לאישור</h2>
+  <p class="note">כל שורה היא הצעה. שום דבר לא נכנס לרשימה עד אישור אנושי.
+     שורות בכתום דורשות תשומת לב — שם פיצול, מיזוג או קטגוריה לא ברורים.</p>
+  <div class="bar">
+    <button class="primary" data-act="acceptClean">אשר את כל הנקיות</button>
+    <button data-act="reset">אפס הכול</button>
+    <span style="flex:1"></span>
+    <button data-filter="all" class="fbtn">הכול</button>
+    <button data-filter="flagged" class="fbtn">רק מסומנות</button>
+    <button data-filter="pending" class="fbtn">רק ממתינות</button>
+    <span class="tag" id="filterCount"></span>
+  </div>
+  <div id="list"></div>
+
+  <h2>כפילויות שזוהו</h2>
+  <p class="note">אותו דבר שיותר מאדם אחד מביא. זה הכישלון שאי אפשר לראות בהודעת וואטסאפ,
+     כי אף אחד לא מחזיק 11 שורות בראש בבת אחת.</p>
+  <div id="groups"></div>
+
+  <h2>מקרים קשים</h2>
+  <p class="note">כל לשונית היא תרחיש שקשה להכריע בו על הנייר. לחיצה על שלב מבצעת אותו באמת.</p>
+  <div class="tabs" id="tabs"></div>
+  <div class="card" id="walk"></div>
+
+  <h2>הפרומפט</h2>
+  <p class="note">זה הפרומפט שהפיק את הנתונים למעלה. מריצים אותו מול API אמיתי
+     (דרך Supabase Edge Function) כדי לבדוק שהתוצאה יציבה ולא מקרית.</p>
+  <details><summary>הצג פרומפט</summary><pre id="prompt"></pre></details>
+
+  <h2>מה למדנו</h2>
+  <div class="card" id="findings"></div>
+
+</div>
+
+<script type="application/json" id="data">
+{
+ "cats":["בשר","ירקות ופירות","מאפים ולחם","שתייה","אלכוהול","חד״פ","ציוד מנגל","ציוד מטבח","ניקיון","חטיפים ומתוקים","ארוחת בוקר","אחר"],
+ "flagLabels":{
+   "compound":"פוצל מצירוף","alt":"ברירה — לא לפצל","vague":"כמות לא מוגדרת",
+   "catgap":"אין קטגוריה מתאימה","risk":"סיכון למיזוג שגוי","paren":"כמות בסוגריים",
+   "family":"מתנגש ברשימת המשפחה","hidden":"תו נסתר בהודעה","ambig":"פירוש דו־משמעי"
+ },
+ "items":[
+  {"o":"ג׳ני","n":"קבבים","c":"בשר","k":"קבב"},
+  {"o":"ג׳ני","n":"טחינה","c":"אחר","k":"טחינה","f":["catgap"]},
+  {"o":"ג׳ני","n":"חומוס","c":"אחר","k":"חומוס","f":["catgap"]},
+  {"o":"ג׳ני","n":"סלט חצילים","c":"אחר","k":"סלט חצילים","f":["catgap"]},
+  {"o":"ג׳ני","n":"קטשופ","c":"אחר","k":"קטשופ","f":["catgap"]},
+  {"o":"ג׳ני","n":"חטיפים","c":"חטיפים ומתוקים","k":"חטיפים","f":["vague","family"]},
+  {"o":"ג׳ני","n":"חלב סויה","c":"ארוחת בוקר","k":"חלב סויה","f":["risk"]},
+  {"o":"ג׳ני","n":"ביצים קשות","c":"ארוחת בוקר","k":"ביצים","note":"קשות","f":["ambig"]},
+  {"o":"ג׳ני","n":"שקיות אשפה","c":"ניקיון","k":"שקיות אשפה"},
+  {"o":"ג׳ני","n":"נייר סופג","q":"חבילה","c":"ניקיון","k":"נייר סופג","f":["compound"],"from":"חבילה של נייר סופג ומגבונים"},
+  {"o":"ג׳ני","n":"מגבונים","c":"ניקיון","k":"מגבונים","f":["compound","ambig"],"from":"חבילה של נייר סופג ומגבונים"},
+  {"o":"ג׳ני","n":"בריזרים","c":"אלכוהול","k":"בריזרים"},
+  {"o":"ג׳ני","n":"קולה זירו","c":"שתייה","k":"קולה זירו"},
+
+  {"o":"רעות","n":"מחבת","c":"ציוד מטבח","k":"מחבת"},
+  {"o":"רעות","n":"המבורגרים","q":"15 יח׳","c":"בשר","k":"המבורגרים"},
+  {"o":"רעות","n":"פתיתים","c":"אחר","k":"פתיתים","f":["catgap"]},
+  {"o":"רעות","n":"סודה","c":"שתייה","k":"סודה"},
+  {"o":"רעות","n":"שיפודים","c":"ציוד מנגל","k":"שיפודים"},
+  {"o":"רעות","n":"קערות לסלט","c":"ציוד מטבח","k":"קערות הגשה","f":["risk"]},
+  {"o":"רעות","n":"כוסות קרות חד״פ","q":"50 יח׳","c":"חד״פ","k":"כוסות קרות חד״פ"},
+  {"o":"רעות","n":"סבון כלים","c":"ניקיון","k":"סבון כלים"},
+
+  {"o":"גילי","n":"נקניקיות","q":"2 ק״ג","c":"בשר","k":"נקניקיות"},
+  {"o":"גילי","n":"קורנפלקס","q":"חבילה","note":"גדולה","c":"ארוחת בוקר","k":"קורנפלקס"},
+  {"o":"גילי","n":"לחם","c":"מאפים ולחם","k":"לחם"},
+  {"o":"גילי","n":"צלחות גדולות חד״פ","c":"חד״פ","k":"צלחות חד״פ","f":["compound"],"from":"צלחות גדולות וקטנות חד״פ"},
+  {"o":"גילי","n":"צלחות קטנות חד״פ","c":"חד״פ","k":"צלחות חד״פ","f":["compound"],"from":"צלחות גדולות וקטנות חד״פ"},
+  {"o":"גילי","n":"כוסות חד״פ","c":"חד״פ","k":"כוסות קרות חד״פ","f":["ambig"]},
+  {"o":"גילי","n":"כוסות חמות","c":"חד״פ","k":"כוסות חמות","f":["risk"]},
+  {"o":"גילי","n":"קעריות חד״פ","c":"חד״פ","k":"קעריות חד״פ","f":["risk"]},
+  {"o":"גילי","n":"וופלות","c":"חטיפים ומתוקים","k":"וופלות"},
+  {"o":"גילי","n":"צ׳יטוס","c":"חטיפים ומתוקים","k":"צ׳יטוס"},
+  {"o":"גילי","n":"מרשמלו","c":"חטיפים ומתוקים","k":"מרשמלו"},
+  {"o":"גילי","n":"תה","c":"שתייה","k":"תה"},
+  {"o":"גילי","n":"סודה","c":"שתייה","k":"סודה"},
+  {"o":"גילי","n":"מגבונים לחים","c":"ניקיון","k":"מגבונים","f":["ambig"]},
+
+  {"o":"דן","n":"מנגל","c":"ציוד מנגל","k":"מנגל","f":["compound"],"from":"מנגל ורשת למנגל"},
+  {"o":"דן","n":"רשת למנגל","c":"ציוד מנגל","k":"רשת למנגל","f":["compound"],"from":"מנגל ורשת למנגל"},
+  {"o":"דן","n":"פחמים","c":"ציוד מנגל","k":"פחמים"},
+  {"o":"דן","n":"קולה זירו","q":"2 בקבוקים","c":"שתייה","k":"קולה זירו"},
+  {"o":"דן","n":"פרגיות","q":"1 ק״ג","note":"מתובלות בבית","c":"בשר","k":"פרגיות"},
+  {"o":"דן","n":"צ׳יפס","q":"חבילה","c":"אחר","k":"צ׳יפס","f":["ambig","catgap"]},
+  {"o":"דן","n":"פיתות","note":"נוספות","c":"מאפים ולחם","k":"פיתות"},
+  {"o":"דן","n":"סוכר","c":"ארוחת בוקר","k":"סוכר","f":["catgap"]},
+  {"o":"דן","n":"קפה","c":"ארוחת בוקר","k":"קפה"},
+  {"o":"דן","n":"ערכת קפה","c":"ציוד מטבח","k":"ערכת קפה"},
+
+  {"o":"ליטל","n":"יין","c":"אלכוהול","k":"יין"},
+  {"o":"ליטל","n":"בריזרים","c":"אלכוהול","k":"בריזרים"},
+  {"o":"ליטל","n":"ביצים","c":"ארוחת בוקר","k":"ביצים","f":["ambig"]},
+  {"o":"ליטל","n":"לחמניות לנקניקיות","q":"20 יח׳","c":"מאפים ולחם","k":"לחמניות לנקניקיות","f":["risk"]},
+  {"o":"ליטל","n":"סיר","c":"ציוד מטבח","k":"סיר"},
+  {"o":"ליטל","n":"נייר אלומיניום","c":"ציוד מטבח","k":"נייר אלומיניום"},
+  {"o":"ליטל","n":"חמוצים","c":"אחר","k":"חמוצים","f":["catgap"]},
+  {"o":"ליטל","n":"שמן זית","c":"אחר","k":"שמן זית","f":["catgap"]},
+  {"o":"ליטל","n":"לימונים","c":"ירקות ופירות","k":"לימונים"},
+  {"o":"ליטל","n":"מיונז","c":"אחר","k":"מיונז","f":["catgap"]},
+  {"o":"ליטל","n":"חריף או עמבה","c":"אחר","k":"חריף/עמבה","f":["alt","catgap"],"split":["חריף","עמבה"]},
+  {"o":"ליטל","n":"קרקרים","c":"חטיפים ומתוקים","k":"קרקרים"},
+  {"o":"ליטל","n":"מצית","c":"ציוד מנגל","k":"מצית"},
+  {"o":"ליטל","n":"כפות הגשה","c":"ציוד מטבח","k":"כפות הגשה"},
+  {"o":"ליטל","n":"מפיות","c":"חד״פ","k":"מפיות"},
+  {"o":"ליטל","n":"סקוץ׳","c":"ניקיון","k":"סקוץ׳"},
+
+  {"o":"ענת","n":"פסטה","c":"אחר","k":"פסטה","f":["catgap"]},
+  {"o":"ענת","n":"ירקות לסלט","c":"ירקות ופירות","k":"ירקות לסלט"},
+  {"o":"ענת","n":"אדממה","c":"ירקות ופירות","k":"אדממה"},
+  {"o":"ענת","n":"ירקות לארוחת הבוקר","c":"ארוחת בוקר","k":"ירקות לבוקר","f":["risk"]},
+  {"o":"ענת","n":"פירות","c":"ירקות ופירות","k":"פירות","f":["vague"]},
+  {"o":"ענת","n":"תירוש","c":"שתייה","k":"תירוש","f":["ambig"]},
+  {"o":"ענת","n":"קרש חיתוך","c":"ציוד מטבח","k":"קרש חיתוך"},
+  {"o":"ענת","n":"סכין חדה","c":"ציוד מטבח","k":"סכין חיתוך","f":["risk"]},
+  {"o":"ענת","n":"מגבת מטבח","c":"ציוד מטבח","k":"מגבת מטבח"},
+
+  {"o":"רות","n":"קולה זירו","c":"שתייה","k":"קולה זירו"},
+  {"o":"רות","n":"לחמניות להמבורגרים","c":"מאפים ולחם","k":"לחמניות להמבורגרים","f":["risk"]},
+  {"o":"רות","n":"קורנפלקס","c":"ארוחת בוקר","k":"קורנפלקס"},
+  {"o":"רות","n":"פירות","c":"ירקות ופירות","k":"פירות","f":["vague"]},
+  {"o":"רות","n":"עוגיות","c":"חטיפים ומתוקים","k":"עוגיות"},
+
+  {"o":"אורטל","n":"פרנצ'פרס","c":"ציוד מטבח","k":"פרנצפרס","f":["compound","ambig"],"from":"פרנצ'פרס עם קפה"},
+  {"o":"אורטל","n":"קפה","c":"ארוחת בוקר","k":"קפה","f":["compound"],"from":"פרנצ'פרס עם קפה"},
+  {"o":"אורטל","n":"שוקו","c":"ארוחת בוקר","k":"שוקו"},
+  {"o":"אורטל","n":"תה","c":"שתייה","k":"תה"},
+  {"o":"אורטל","n":"טחינה","c":"אחר","k":"טחינה","f":["catgap"]},
+  {"o":"אורטל","n":"פרגיות","c":"בשר","k":"פרגיות"},
+  {"o":"אורטל","n":"חטיפים","c":"חטיפים ומתוקים","k":"חטיפים","f":["vague","family"]},
+  {"o":"אורטל","n":"מרשמלו","c":"חטיפים ומתוקים","k":"מרשמלו"},
+  {"o":"אורטל","n":"מלח","c":"אחר","k":"מלח","f":["catgap"]},
+  {"o":"אורטל","n":"עוגיות","c":"חטיפים ומתוקים","k":"עוגיות"},
+  {"o":"אורטל","n":"יין","c":"אלכוהול","k":"יין"},
+  {"o":"אורטל","n":"מצית","c":"ציוד מנגל","k":"מצית"},
+  {"o":"אורטל","n":"מלקחיים למנגל","c":"ציוד מנגל","k":"מלקחיים"},
+  {"o":"אורטל","n":"שיפודים","c":"ציוד מנגל","k":"שיפודים"},
+  {"o":"אורטל","n":"קוביות הדלקה","c":"ציוד מנגל","k":"קוביות הדלקה"},
+  {"o":"אורטל","n":"כלים רב פעמיים","q":"6 מכל סוג","c":"ציוד מטבח","k":"כלים רב פעמיים","f":["paren"]},
+  {"o":"אורטל","n":"קרש חיתוך","c":"ציוד מטבח","k":"קרש חיתוך"},
+  {"o":"אורטל","n":"סכין חד","c":"ציוד מטבח","k":"סכין חיתוך","f":["risk"]},
+
+  {"o":"אביב","n":"צ׳יפס","c":"אחר","k":"צ׳יפס","f":["ambig"]},
+  {"o":"אביב","n":"פתיתים","c":"אחר","k":"פתיתים","f":["catgap"]},
+  {"o":"אביב","n":"פלטת ירקות","c":"ירקות ופירות","k":"פלטת ירקות"},
+  {"o":"אביב","n":"פירות","c":"ירקות ופירות","k":"פירות","f":["vague"]},
+  {"o":"אביב","n":"חטיפים","c":"חטיפים ומתוקים","k":"חטיפים","f":["vague","family"]},
+  {"o":"אביב","n":"קפה","c":"ארוחת בוקר","k":"קפה"},
+  {"o":"אביב","n":"תה","c":"שתייה","k":"תה"},
+  {"o":"אביב","n":"ערק","c":"אלכוהול","k":"ערק"},
+  {"o":"אביב","n":"לימונדה לערק","c":"שתייה","k":"לימונדה"},
+  {"o":"אביב","n":"יין","c":"אלכוהול","k":"יין"},
+  {"o":"אביב","n":"עצים למדורה","c":"ציוד מנגל","k":"עצים למדורה"},
+  {"o":"אביב","n":"ווק לצ׳יפס","c":"ציוד מטבח","k":"ווק","f":["ambig"]},
+
+  {"o":"אלכס","n":"קולה זירו","c":"שתייה","k":"קולה זירו"},
+  {"o":"אלכס","n":"ממרח שוקולד נוטלה","c":"ארוחת בוקר","k":"ממרח שוקולד"},
+  {"o":"אלכס","n":"חלב","q":"3 קרטונים","note":"רגיל","c":"ארוחת בוקר","k":"חלב","f":["risk"]},
+  {"o":"אלכס","n":"ענבים","c":"ירקות ופירות","k":"ענבים"},
+  {"o":"אלכס","n":"בירות","c":"אלכוהול","k":"בירה"},
+  {"o":"אלכס","n":"סכינים חד״פ","c":"חד״פ","k":"סכינים חד״פ","f":["risk"]},
+  {"o":"אלכס","n":"מזלגות חד״פ","c":"חד״פ","k":"מזלגות חד״פ"},
+  {"o":"אלכס","n":"כפיות חד״פ","c":"חד״פ","k":"כפיות חד״פ"},
+
+  {"o":"אייל","n":"פרגיות / לבבות","note":"בשר כלשהו","c":"בשר","k":"פרגיות-לבבות","f":["alt","paren","hidden"],"split":["פרגיות","לבבות"]},
+  {"o":"אייל","n":"לחם","c":"מאפים ולחם","k":"לחם"},
+  {"o":"אייל","n":"גבינות לבוקר","c":"ארוחת בוקר","k":"גבינות"},
+  {"o":"אייל","n":"חטיפים","c":"חטיפים ומתוקים","k":"חטיפים","f":["vague","family"]},
+  {"o":"אייל","n":"ביצים","c":"ארוחת בוקר","k":"ביצים","f":["ambig"]},
+  {"o":"אייל","n":"אלכוהול לבחירתך","c":"אלכוהול","k":"אלכוהול כללי","f":["vague"]},
+  {"o":"אייל","n":"פירות","c":"ירקות ופירות","k":"פירות","f":["vague"]}
+ ],
+ "family":["שישיית מים","חטיפים","ציוד אישי ולינה","בגדים חמים","ציוד למסלול המפלים"]
+}
+</script>
+
+<script>
+/* ---------------------------------------------------------------------------
+   המודול הטהור. זה החלק ששורד את האב־טיפוס.
+   אין כאן DOM, אין מאזיני אירועים — רק (state, action) => state.
+   --------------------------------------------------------------------------- */
+const Review = (() => {
+
+  function init(raw) {
+    const items = raw.items.map((it, i) => ({
+      id: i, owner: it.o, name: it.n, qty: it.q || null, cat: it.c,
+      note: it.note || null, key: it.k, flags: it.f || [],
+      from: it.from || null, splitInto: it.split || null,
+      status: 'pending', mergedInto: null
+    }));
+    const groups = {};
+    for (const it of items) {
+      (groups[it.key] = groups[it.key] || []).push(it.id);
+    }
+    const dupes = {};
+    for (const [key, ids] of Object.entries(groups)) {
+      const owners = new Set(ids.map(i => items[i].owner));
+      if (owners.size > 1) dupes[key] = 'open';
+    }
+    return { items, dupes, log: [] };
+  }
+
+  function reduce(state, action) {
+    const s = {
+      items: state.items.map(i => ({ ...i })),
+      dupes: { ...state.dupes },
+      log: [...state.log]
+    };
+    const say = m => s.log.unshift(m);
+    const at = id => s.items.find(i => i.id === id);
+
+    switch (action.type) {
+      case 'ACCEPT':
+        at(action.id).status = 'accepted';
+        say('אושר: ' + at(action.id).name);
+        break;
+
+      case 'REJECT':
+        at(action.id).status = 'rejected';
+        say('נדחה: ' + at(action.id).name);
+        break;
+
+      case 'SET_CATEGORY': {
+        const it = at(action.id);
+        it.cat = action.cat;
+        it.flags = it.flags.filter(f => f !== 'catgap');
+        say(it.name + ' הועבר לקטגוריה ' + action.cat);
+        break;
+      }
+
+      case 'SPLIT': {
+        const it = at(action.id);
+        if (!it.splitInto) break;
+        const parts = it.splitInto;
+        it.name = parts[0];
+        it.flags = it.flags.filter(f => f !== 'alt');
+        it.splitInto = null;
+        let nextId = Math.max(...s.items.map(i => i.id)) + 1;
+        for (const p of parts.slice(1)) {
+          s.items.push({ ...it, id: nextId++, name: p, status: 'pending' });
+        }
+        say('פוצל: ' + parts.join(' + ') + ' — שימו לב שזו הייתה ברירה, לא רשימה');
+        break;
+      }
+
+      case 'UNSPLIT': {
+        // ביטול פיצול שגוי: מחזירים את הפריטים שמקורם באותו צירוף לשורה אחת
+        const it = at(action.id);
+        const origin = it.from;
+        const sibs = s.items.filter(i => i.from === origin);
+        sibs.forEach((sib, idx) => {
+          if (idx === 0) {
+            sib.name = origin;
+            sib.flags = sib.flags.filter(f => f !== 'compound');
+            sib.from = null;
+          } else {
+            sib.status = 'rejected';
+            sib.mergedInto = sibs[0].id;
+          }
+        });
+        say('אוחד בחזרה: ' + origin);
+        break;
+      }
+
+      case 'MERGE': {
+        const ids = s.items.filter(i => i.key === action.key).map(i => i.id);
+        const keeper = at(ids[0]);
+        const owners = [...new Set(ids.map(i => at(i).owner))];
+        keeper.owner = owners.join(' + ');
+        keeper.status = 'accepted';
+        ids.slice(1).forEach(i => { at(i).status = 'merged'; at(i).mergedInto = keeper.id; });
+        s.dupes[action.key] = 'merged';
+        say('מוזג: ' + keeper.name + ' — ' + owners.length + ' אנשים על פריט אחד');
+        break;
+      }
+
+      case 'KEEP_SEPARATE':
+        s.dupes[action.key] = 'separate';
+        say('נשמר בנפרד: ' + action.key);
+        break;
+
+      case 'ACCEPT_CLEAN': {
+        let n = 0;
+        s.items.forEach(i => {
+          if (i.status === 'pending' && i.flags.length === 0) { i.status = 'accepted'; n++; }
+        });
+        say('אושרו ' + n + ' הצעות נקיות בלחיצה אחת');
+        break;
+      }
+
+      case 'RESET':
+        return init(action.raw);
+    }
+    return s;
+  }
+
+  /* מדדים — מה שמעניין באמת: כמה עבודה ידנית נשארה */
+  function stats(state) {
+    const live = state.items.filter(i => i.status !== 'merged');
+    const flagged = live.filter(i => i.flags.length && i.status === 'pending');
+    const openDupes = Object.values(state.dupes).filter(v => v === 'open').length;
+    return {
+      total: live.length,
+      pending: live.filter(i => i.status === 'pending').length,
+      accepted: live.filter(i => i.status === 'accepted').length,
+      rejected: live.filter(i => i.status === 'rejected').length,
+      flagged: flagged.length,
+      clean: live.filter(i => i.status === 'pending' && !i.flags.length).length,
+      dupes: openDupes,
+      other: live.filter(i => i.cat === 'אחר' && i.status !== 'rejected').length,
+      owners: new Set(live.map(i => i.owner)).size
+    };
+  }
+
+  return { init, reduce, stats };
+})();
+
+/* ---------------------------------------------------------------------------
+   הדף. קליפה דקה מעל המודול. נזרק.
+   --------------------------------------------------------------------------- */
+const RAW = JSON.parse(document.getElementById('data').textContent);
+let state = Review.init(RAW);
+let filter = 'all';
+let tab = 0;
+let walkStep = 0;
+
+const $ = s => document.querySelector(s);
+const dispatch = a => { state = Review.reduce(state, a); render(); };
+
+const SCENARIOS = [
+  {
+    title: 'פיצול שלא היה צריך לקרות',
+    text: 'ליטל כתבה "חריף או עמבה". זו בְּרֵירָה — היא תביא אחד מהם, לא את שניהם. ' +
+          'מפרק תמים שמפצל על כל מפריד היה יוצר כאן שני פריטים, ואז הרשימה מבקשת דבר שאיש לא הבטיח. ' +
+          'אותו דבר אצל אייל: "פרגיות / לבבות". שימו לב שהמפרק לא פיצל, וסימן. ' +
+          'לחצו על הפיצול כדי לראות מה היה קורה אילו טעה.',
+    steps: [
+      { label: 'פצל את "חריף או עמבה"', act: () => ({ type: 'SPLIT', id: byName('חריף או עמבה') }) },
+      { label: 'דחה את "עמבה" — לא באמת הובטחה', act: () => ({ type: 'REJECT', id: byName('עמבה') }) },
+      { label: 'אשר את "פרגיות / לבבות" כפי שהוא', act: () => ({ type: 'ACCEPT', id: byName('פרגיות / לבבות') }) }
+    ]
+  },
+  {
+    title: 'פיצול שכן היה צריך',
+    text: '"צלחות גדולות וקטנות חד״פ" הוא באמת שני פריטים — קונים אותם בנפרד ואפשר לשכוח אחד מהם. ' +
+          'כך גם "מנגל ורשת למנגל" ו"חבילה של נייר סופג ומגבונים". ' +
+          'בצירוף האחרון יש שאלה פתוחה: האם "חבילה" מתייחסת גם למגבונים? ' +
+          'נסו לבטל פיצול אחד כדי להרגיש את ההבדל.',
+    steps: [
+      { label: 'אשר "צלחות גדולות חד״פ"', act: () => ({ type: 'ACCEPT', id: byName('צלחות גדולות חד״פ') }) },
+      { label: 'אשר "צלחות קטנות חד״פ"', act: () => ({ type: 'ACCEPT', id: byName('צלחות קטנות חד״פ') }) },
+      { label: 'בטל את הפיצול של נייר סופג + מגבונים', act: () => ({ type: 'UNSPLIT', id: byName('נייר סופג') }) }
+    ]
+  },
+  {
+    title: 'הכפילות שאי אפשר לראות בוואטסאפ',
+    text: 'ארבעה אנשים מביאים קולה זירו. שלושה מביאים קפה. שלושה יין. שניים טחינה. ' +
+          'איש לא עשה כאן טעות — פשוט אי אפשר לקרוא אחת עשרה שורות ולזכור. ' +
+          'זו, לדעתי, התועלת הגדולה ביותר של האפליקציה, גדולה יותר מזיהוי מה חסר.',
+    steps: [
+      { label: 'מזג את קולה זירו (4 אנשים)', act: () => ({ type: 'MERGE', key: 'קולה זירו' }) },
+      { label: 'מזג את טחינה (2 אנשים)', act: () => ({ type: 'MERGE', key: 'טחינה' }) },
+      { label: 'השאר את היין בנפרד — שלוש בקבוקים זה בסדר', act: () => ({ type: 'KEEP_SEPARATE', key: 'יין' }) }
+    ]
+  },
+  {
+    title: 'המיזוג המסוכן',
+    text: 'זה התרחיש שבו אלגוריתם התאמה נאיבי הורס את הרשימה. ' +
+          '"סכין חדה" של ענת ו"סכין חד" של אורטל הם אותו דבר בשתי צורות כתיב — צריך למזג. ' +
+          'אבל "סכינים חד״פ" של אלכס הוא דבר אחר לגמרי, ומיזוג שלו ימחק סכו״ם ל־22 איש. ' +
+          'אותו מוקש: "חלב" מול "חלב סויה", "לחמניות לנקניקיות" מול "לחמניות להמבורגרים".',
+    steps: [
+      { label: 'מזג "סכין חדה" + "סכין חד" — נכון', act: () => ({ type: 'MERGE', key: 'סכין חיתוך' }) },
+      { label: 'אשר "סכינים חד״פ" בנפרד — חובה', act: () => ({ type: 'ACCEPT', id: byName('סכינים חד״פ') }) },
+      { label: 'אשר "חלב סויה" בנפרד מ"חלב"', act: () => ({ type: 'ACCEPT', id: byName('חלב סויה') }) }
+    ]
+  },
+  {
+    title: 'הקטגוריות לא מספיקות',
+    text: 'טחינה, חומוס, סלט חצילים, קטשופ, מיונז, חמוצים, שמן זית, מלח, סוכר, פסטה, פתיתים — ' +
+          'כולם נפלו ל"אחר", כי ברשימת הקטגוריות שבמפרט אין "סלטים וממרחים" ואין "מוצרי יסוד". ' +
+          'כשחמישית מהרשימה יושבת ב"אחר", הקטגוריה מפסיקה לעזור למי שעומד בסופר.',
+    steps: [
+      { label: 'ראו כמה פריטים ב"אחר"', act: () => ({ type: 'NOOP' }) },
+      { label: 'אשר את טחינה כפי שהיא', act: () => ({ type: 'ACCEPT', id: byName('טחינה') }) }
+    ]
+  },
+  {
+    title: 'חטיפים — התנגשות עם רשימת המשפחה',
+    text: 'ארבעה אנשים רשמו "חטיפים" במאגר המשותף, ו"חטיפים" מופיע גם בְּ"באחריות כל משפחה". ' +
+          'אז מי מביא חטיפים — כולם, או הארבעה? זו לא שאלת פירוק, זו שאלת מודל: ' +
+          'פריט משותף ופריט משפחתי יכולים לשאת את אותו שם ולהתכוון לדברים שונים.',
+    steps: [
+      { label: 'מזג את כל ה"חטיפים" המשותפים', act: () => ({ type: 'MERGE', key: 'חטיפים' }) },
+      { label: 'דחה — זו כבר אחריות משפחתית', act: () => ({ type: 'REJECT', id: byName('חטיפים') }) }
+    ]
+  }
+];
+
+function byName(n) {
+  const it = state.items.find(i => i.name === n && i.status !== 'merged');
+  return it ? it.id : -1;
+}
+
+const PROMPT = `You are parsing a Hebrew WhatsApp message from a family camping group.
+Each numbered line is one person and the things they promised to bring.
+
+Return JSON: { "people": [ { "name", "items": [ {
+  "name",            // the thing itself, WITHOUT the quantity
+  "amount"|null,     // number
+  "unit"|null,       // ק"ג / יח' / חבילה / בקבוקים ...
+  "note"|null,       // qualifiers: "מתובלות בבית", "גדולה", "רגיל"
+  "category",        // one of the fixed list below
+  "mergeKey",        // canonical name for duplicate detection
+  "flags": []        // see below
+} ] } ] }
+
+Categories: בשר, ירקות ופירות, מאפים ולחם, שתייה, אלכוהול, חד״פ, ציוד מנגל,
+ציוד מטבח, ניקיון, חטיפים ומתוקים, ארוחת בוקר, אחר
+
+CRITICAL RULES
+1. "X ו-Y" is usually TWO items. Split it.
+2. "X או Y" and "X / Y" are ONE item — a choice. DO NOT split. flag: "alt"
+3. Quantity may lead ("2 ק״ג נקניקיות") or be embedded ("חבילה של קורנפלקס").
+   Parenthesised quantities ("6 יחידות מכל דבר") -> flag "paren".
+4. mergeKey must merge spelling variants (סכין חדה / סכין חד) but MUST NOT merge
+   genuinely different things (סכינים חד״פ, חלב vs חלב סויה,
+   לחמניות לנקניקיות vs לחמניות להמבורגרים). When unsure, flag "risk" and do not merge.
+5. Items with no quantity at all ("חטיפים", "פירות") -> flag "vague".
+6. If nothing in the category list fits, use אחר and flag "catgap".
+7. Strip invisible Unicode (U+2060 and friends) that WhatsApp inserts before names.
+8. Never invent an item that is not in the text.
+
+The trailing "באחריות כל משפחה" block is NOT part of anyone's list —
+return it separately as familyChecklist.`;
+
+function render() {
+  const st = Review.stats(state);
+
+  $('#stats').innerHTML = [
+    ['הצעות בסך הכול', st.total, 0],
+    ['ממתינות', st.pending, 0],
+    ['נקיות — אישור בלחיצה', st.clean, 0],
+    ['דורשות תשומת לב', st.flagged, 1],
+    ['כפילויות פתוחות', st.dupes, 1],
+    ['נפלו ל״אחר״', st.other, 1],
+    ['אושרו', st.accepted, 0],
+    ['נדחו', st.rejected, 0]
+  ].map(([l, n, hot]) =>
+    `<div class="stat ${hot && n ? 'hot' : ''}"><div class="n">${n}</div><div class="l">${l}</div></div>`
+  ).join('');
+
+  $('#flash').textContent = state.log[0] || '';
+
+  document.querySelectorAll('.fbtn').forEach(b =>
+    b.classList.toggle('on', b.dataset.filter === filter));
+
+  const live = state.items.filter(i => i.status !== 'merged');
+  const shown = live.filter(i =>
+    filter === 'all' ? true :
+    filter === 'flagged' ? i.flags.length :
+    i.status === 'pending');
+  $('#filterCount').textContent = shown.length + ' מוצגות';
+
+  const byOwner = {};
+  shown.forEach(i => (byOwner[i.owner] = byOwner[i.owner] || []).push(i));
+
+  $('#list').innerHTML = Object.entries(byOwner).map(([owner, items]) => `
+    <div style="margin-bottom:16px">
+      <h3>${owner} <span class="tag">${items.length}</span></h3>
+      ${items.map(i => `
+        <div class="row ${i.flags.length ? 'flagged' : ''} ${i.status}">
+          <div class="body">
+            <div><span class="name">${i.name}</span>
+              ${i.qty ? `<span class="tag">${i.qty}</span>` : ''}
+              <span class="tag c">${i.cat}</span>
+              ${i.flags.map(f => `<span class="tag f">${RAW.flagLabels[f]}</span>`).join('')}
+            </div>
+            ${i.note ? `<div class="meta">הערה: ${i.note}</div>` : ''}
+            ${i.from ? `<div class="meta">מקור: ״${i.from}״</div>` : ''}
+          </div>
+          <div class="acts">
+            ${i.status === 'pending' ? `
+              <button onclick="dispatch({type:'ACCEPT',id:${i.id}})">אשר</button>
+              <button onclick="dispatch({type:'REJECT',id:${i.id}})">דחה</button>` : ''}
+            ${i.splitInto ? `<button onclick="dispatch({type:'SPLIT',id:${i.id}})">פצל</button>` : ''}
+            ${i.from ? `<button onclick="dispatch({type:'UNSPLIT',id:${i.id}})">אחד בחזרה</button>` : ''}
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+
+  const groupHtml = Object.entries(state.dupes).map(([key, status]) => {
+    const members = state.items.filter(i => i.key === key);
+    const owners = [...new Set(members.map(m => m.owner))];
+    const risky = members.some(m => m.flags.includes('risk'));
+    return `<div class="group ${status !== 'open' ? 'resolved' : ''}">
+      <div style="display:flex;gap:12px;align-items:center">
+        <div style="flex:1">
+          <span class="name">${members[0].name}</span>
+          <span class="tag">${owners.length} אנשים</span>
+          ${risky ? '<span class="tag f">בדקו לפני מיזוג</span>' : ''}
+          <div class="meta">${owners.join(' · ')}</div>
+        </div>
+        ${status === 'open' ? `
+          <button class="primary" onclick="dispatch({type:'MERGE',key:'${key}'})">מזג לאחד</button>
+          <button onclick="dispatch({type:'KEEP_SEPARATE',key:'${key}'})">השאר בנפרד</button>`
+        : `<span class="tag c">${status === 'merged' ? 'מוזג' : 'נשמר בנפרד'}</span>`}
+      </div>
+    </div>`;
+  });
+  $('#groups').innerHTML = groupHtml.join('') || '<p class="note">אין כפילויות.</p>';
+
+  $('#tabs').innerHTML = SCENARIOS.map((s, i) =>
+    `<button class="${i === tab ? 'on' : ''}" onclick="setTab(${i})">${s.title}</button>`).join('');
+
+  const sc = SCENARIOS[tab];
+  $('#walk').innerHTML = `
+    <p style="margin-top:0">${sc.text}</p>
+    ${sc.steps.map((s, i) => `
+      <div class="step ${i < walkStep ? 'done' : i === walkStep ? 'now' : ''}">
+        <div class="i">${i + 1}</div>
+        <button ${i === walkStep ? 'class="primary"' : ''} ${i !== walkStep ? 'disabled' : ''}
+                onclick="runStep(${i})">${s.label}</button>
+      </div>`).join('')}
+    <div class="bar"><button onclick="restartWalk()">התחל את התרחיש מחדש</button></div>`;
+
+  $('#prompt').textContent = PROMPT;
+
+  $('#findings').innerHTML = `
+    <p style="margin-top:0"><strong>המפרק הפיק ${RAW.items.length} פריטים מ־11 שורות,
+    שמהם ${RAW.items.filter(i => !i.f).length} עברו ללא סימון.</strong>
+    כלומר כ־${Math.round(RAW.items.filter(i => !i.f).length / RAW.items.length * 100)}%
+    מהרשימה נכנסת בלחיצה אחת, והשאר דורש הכרעה אנושית קצרה.</p>
+    <ul style="margin:0;padding-inline-start:20px">
+      <li><strong>הייבוא ריאלי.</strong> ערב הקלדה הופך לכמה דקות של אישור — אבל רק אם יש מסך אישור.</li>
+      <li><strong>הכפילויות הן הפרס.</strong> ${Object.keys(state.dupes).length} קבוצות כפילות ברשימה
+          הקיימת שלכם, כולל קולה זירו אצל ארבעה אנשים.</li>
+      <li><strong>הקטגוריות במפרט חסרות.</strong> ${RAW.items.filter(i => i.c === 'אחר').length} פריטים
+          נפלו ל״אחר״. חסרות לפחות ״סלטים וממרחים״ ו״מוצרי יסוד״.</li>
+      <li><strong>״או״ ו״/״ אינם מפרידים.</strong> פיצול שלהם ימציא פריטים שאיש לא הבטיח.</li>
+      <li><strong>התאמה לפי שם קרוב מסוכנת.</strong> סכין חדה ≠ סכינים חד״פ. חלב ≠ חלב סויה.</li>
+      <li><strong>״חטיפים״ שובר את המודל.</strong> אותו שם קיים גם במאגר המשותף וגם ברשימת המשפחה.</li>
+    </ul>`;
+}
+
+function setTab(i) { tab = i; walkStep = 0; render(); }
+function restartWalk() { state = Review.init(RAW); walkStep = 0; render(); }
+function runStep(i) {
+  const a = SCENARIOS[tab].steps[i].act();
+  walkStep = i + 1;
+  if (a.type !== 'NOOP') dispatch(a); else render();
+}
+
+document.querySelector('.bar').addEventListener('click', e => {
+  const act = e.target.dataset.act, f = e.target.dataset.filter;
+  if (act === 'acceptClean') dispatch({ type: 'ACCEPT_CLEAN' });
+  if (act === 'reset') { state = Review.init(RAW); render(); }
+  if (f) { filter = f; render(); }
+});
+
+render();
+</script>
+</body>
+</html>

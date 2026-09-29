@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"><title>A3 — פעולת התפיסה</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+.hdr{padding:15px 18px 10px;background:#fff;border-bottom:1px solid var(--line)}
+.hdr h1{margin:0;font-size:17px}
+.cnt{padding:8px 18px;font-size:12px;color:var(--muted);background:var(--bg)}
+.toast{position:absolute;bottom:14px;right:14px;left:14px;background:var(--ink);color:#fff;
+  border-radius:11px;padding:11px 14px;display:flex;align-items:center;gap:10px;font-size:13.5px;
+  box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.toast button{margin-inline-start:auto;background:transparent;border:0;color:#7fd2af;
+  font:inherit;font-weight:700;cursor:pointer}
+
+/* ---------- A: כל השורה היא הכפתור ---------- */
+.vA .it{display:flex;align-items:center;gap:11px;padding:14px 18px;background:#fff;
+  border-bottom:1px solid #f2efe9;cursor:pointer}
+.vA .it.mine{background:var(--accent-soft)}
+.vA .it .n{flex:1;font-size:15px}
+.vA .tick{width:24px;height:24px;border-radius:99px;border:2px solid var(--line);
+  display:grid;place-items:center;color:#fff;font-size:13px}
+.vA .it.mine .tick{background:var(--accent);border-color:var(--accent)}
+
+/* ---------- B: כפתור מפורש ---------- */
+.vB .it{display:flex;align-items:center;gap:11px;padding:11px 16px;background:#fff;
+  border-bottom:1px solid #f2efe9}
+.vB .it .n{flex:1;font-size:14.5px}
+.vB .take{border:1px solid var(--accent);color:var(--accent);background:#fff;border-radius:99px;
+  padding:6px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.vB .drop{border:1px solid var(--line);color:var(--muted);background:#fff;border-radius:99px;
+  padding:6px 12px;font:inherit;font-size:12.5px;cursor:pointer}
+
+/* ---------- C: החלקה ---------- */
+.vC .wrap{position:relative;overflow:hidden;background:var(--accent);border-bottom:1px solid #f2efe9}
+.vC .wrap .behind{position:absolute;inset:0;display:flex;align-items:center;
+  padding:0 20px;color:#fff;font-size:14px;font-weight:600}
+.vC .wrap.drop{background:#b4541a}
+.vC .it{display:flex;align-items:center;gap:11px;padding:14px 18px;background:#fff;
+  position:relative;touch-action:pan-y;cursor:grab}
+.vC .it .n{flex:1;font-size:15px}
+.vC .hint{padding:12px 18px;font-size:12.5px;color:var(--muted);background:var(--bg)}
+</style>
+</head>
+<body>
+<div class="proto-head">
+  <h1>A3 · איך תופסים פריט</h1>
+  <p class="qq">השאלה: זו הפעולה הכי חוזרת באפליקציה. אפשר לעשות אותה ביד אחת במעבר בסופר בלי טעויות?</p>
+  <p>שלוש האפשרויות עובדות באמת. נסו להחליק, ללחוץ, ולטעות בכוונה.</p>
+</div>
+<div id="app"></div>
+
+<script src="data.js"></script>
+<script src="proto.js"></script>
+<script>
+/* מצב חי — מי תפס מה, וכמה טעויות נצברו */
+const rows = CAMP.byCat('ציוד מנגל').concat(CAMP.byCat('שתייה')).slice(0, 9)
+  .map(i => ({ id: i.id, n: i.n, q: i.q, by: i.by }));
+let toast = null, misfires = 0, taps = 0;
+
+function claim(id, who) {
+  const r = rows.find(x => x.id === id);
+  const was = r.by;
+  r.by = who;
+  toast = { msg: who ? `תפסת: ${r.n}` : `ויתרת על: ${r.n}`, undo: () => { r.by = was; toast = null; repaint(); } };
+  repaint();
+}
+function counters() {
+  const mine = rows.filter(r => r.by === CAMP.me).length;
+  return `<div class="cnt">אתה (${CAMP.me}) מביא ${mine} מתוך ${rows.length} ·
+    לחיצות: ${taps} · ביטולים: ${misfires}</div>`;
+}
+function toastHtml() {
+  return toast ? `<div class="toast"><span>${toast.msg}</span>
+    <button onclick="misfires++;toast.undo()">ביטול</button></div>` : '';
+}
+
+/* ============ A · השורה כולה ============ */
+function varA() {
+  return `<div class="vA">
+    <div class="hdr"><h1>ציוד ושתייה</h1>
+      <div class="tiny muted">הקשה על שורה תופסת אותה. הקשה שוב מוותרת.</div></div>
+    ${counters()}
+    ${rows.map(r => `<div class="it ${r.by === CAMP.me ? 'mine' : ''}"
+        onclick="taps++;claim(${r.id}, ${r.by === CAMP.me ? 'null' : `'${CAMP.me}'`})">
+      <div class="tick">${r.by === CAMP.me ? '✓' : ''}</div>
+      <span class="n">${r.n}${r.q ? ` <span class="chip">${r.q}</span>` : ''}</span>
+      ${r.by && r.by !== CAMP.me ? A(r.by) : ''}
+    </div>`).join('')}
+    <div class="hint" style="padding:14px 18px;font-size:12.5px;color:var(--muted)">
+      הכי מהיר, והכי מסוכן: אצבע שנוחתת בזמן גלילה מוותרת על המנגל בלי שתשים לב.
+      ה״ביטול״ למטה הוא רשת הביטחון היחידה.</div>
+    ${toastHtml()}</div>`;
+}
+
+/* ============ B · כפתור מפורש ============ */
+function varB() {
+  return `<div class="vB">
+    <div class="hdr"><h1>ציוד ושתייה</h1>
+      <div class="tiny muted">אזור המגע הוא הכפתור בלבד.</div></div>
+    ${counters()}
+    ${rows.map(r => `<div class="it">
+      ${r.by ? A(r.by) : '<div class="avatar" style="background:var(--warn-soft);color:var(--warn)">?</div>'}
+      <span class="n">${r.n}${r.q ? ` <span class="chip">${r.q}</span>` : ''}
+        ${r.by ? `<div class="tiny muted">${r.by === CAMP.me ? 'אתה מביא' : r.by + ' מביא'}</div>`
+               : '<div class="tiny" style="color:var(--warn)">אף אחד לא לקח</div>'}</span>
+      ${r.by === CAMP.me
+        ? `<button class="drop" onclick="taps++;claim(${r.id},null)">ויתרתי</button>`
+        : r.by ? '' : `<button class="take" onclick="taps++;claim(${r.id},'${CAMP.me}')">אני מביא</button>`}
+    </div>`).join('')}
+    <div class="hint" style="padding:14px 18px;font-size:12.5px;color:var(--muted)">
+      בלתי אפשרי לטעות, אבל דורש כיוון מדויק — וכשיש 70 פריטים זה 70 כפתורים קטנים.
+      שימו לב שאי אפשר לקחת פריט של מישהו אחר בלחיצה אחת, וזו החלטה מכוונת.</div>
+    ${toastHtml()}</div>`;
+}
+
+/* ============ C · החלקה ============ */
+function varC() {
+  return `<div class="vC">
+    <div class="hdr"><h1>ציוד ושתייה</h1>
+      <div class="tiny muted">החליקו שורה שמאלה כדי לתפוס. החלקה על שלכם — מוותרת.</div></div>
+    ${counters()}
+    ${rows.map(r => `<div class="wrap ${r.by === CAMP.me ? 'drop' : ''}">
+      <div class="behind">${r.by === CAMP.me ? '↤ ויתרתי' : '↤ אני מביא'}</div>
+      <div class="it" data-id="${r.id}">
+        ${r.by ? A(r.by) : '<div class="avatar" style="background:#eee;color:#999">?</div>'}
+        <span class="n">${r.n}${r.q ? ` <span class="chip">${r.q}</span>` : ''}</span>
+        ${r.by === CAMP.me ? '<span class="chip a">שלך</span>' : ''}
+      </div></div>`).join('')}
+    <div class="hint">ביד אחת זה מצוין. אבל אין שום דבר על המסך שמלמד שאפשר להחליק,
+      וחצי מהקבוצה לא תגלה את זה לבד.</div>
+    ${toastHtml()}</div>`;
+}
+
+/* גרירה אמיתית לוריאנט C */
+function wireSwipe(root) {
+  root.querySelectorAll('.vC .it').forEach(el => {
+    let x0 = null;
+    el.addEventListener('pointerdown', e => { x0 = e.clientX; el.setPointerCapture(e.pointerId); });
+    el.addEventListener('pointermove', e => {
+      if (x0 === null) return;
+      const dx = Math.min(0, e.clientX - x0);
+      el.style.transform = `translateX(${dx}px)`;
+    });
+    el.addEventListener('pointerup', e => {
+      if (x0 === null) return;
+      const dx = e.clientX - x0; x0 = null;
+      el.style.transform = '';
+      if (dx < -70) {
+        taps++;
+        const id = +el.dataset.id, r = rows.find(x => x.id === id);
+        claim(id, r.by === CAMP.me ? null : CAMP.me);
+      }
+    });
+  });
+}
+
+window.VARIANTS = [
+  { key: 'A', name: 'השורה כולה', render: varA },
+  { key: 'B', name: 'כפתור מפורש', render: varB },
+  { key: 'C', name: 'החלקה', render: varC, after: wireSwipe }
+];
+mountPrototype();
+</script>
+</body>
+</html>
