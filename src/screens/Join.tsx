@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { repo } from '../data/repo'
 import { formatTripCode, isWellFormedTripCode, normaliseTripCode } from '../domain/code'
 import type { Camper } from '../domain/types'
@@ -39,6 +39,19 @@ export function Join({
       setError('לא מצאנו טיול עם הקוד הזה. בדקו את ההודעה בקבוצה.')
     }
   }
+
+  /**
+   * A code arriving in the link must look itself up, not just sit in the box.
+   * `lookUp` used to run only from `onChange`, so following the WhatsApp link
+   * filled the field and stopped: no names, no error, nothing to press. The
+   * link is how the whole group gets in, so that was the app's front door
+   * welded shut. Runs once; typing takes over from there.
+   */
+  useEffect(() => {
+    const initial = normaliseTripCode(fromLink)
+    if (isWellFormedTripCode(initial)) void lookUp(initial)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="screen join">
