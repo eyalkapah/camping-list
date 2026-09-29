@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { itemFromText } from './domain/manualItem'
 import { Admin } from './screens/Admin'
 import { Home } from './screens/Home'
 import { ImportToTrip } from './screens/ImportToTrip'
@@ -8,8 +9,17 @@ import { NewTrip } from './screens/NewTrip'
 import { useTrip } from './state/useTrip'
 
 export default function App() {
-  const { session, snapshot, status, join, leave, setClaim, importSuggestions, setFamilyCheck } =
-    useTrip()
+  const {
+    session,
+    snapshot,
+    status,
+    join,
+    leave,
+    setClaim,
+    addItem,
+    importSuggestions,
+    setFamilyCheck,
+  } = useTrip()
   const [tab, setTab] = useState<'list' | 'family'>('list')
   const [creating, setCreating] = useState(false)
   const [importing, setImporting] = useState(false)
@@ -70,6 +80,16 @@ export default function App() {
           snapshot={snapshot}
           camperId={session.camperId}
           onClaim={setClaim}
+          onAdd={(text, categoryId, claim) => {
+            const item = itemFromText(
+              snapshot.trip.id,
+              text,
+              session.camperId,
+              categoryId,
+              claim,
+            )
+            if (item) addItem(item)
+          }}
           onImport={isOrganiser ? () => setImporting(true) : undefined}
         />
       ) : (

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { TripSnapshot } from '../data/repo'
 import { BASELINE } from '../data/baseline'
-import { FAMILY_OBLIGATIONS } from '../data/catalog'
+import { CATEGORIES, FAMILY_OBLIGATIONS } from '../data/catalog'
 import {
   byCategory,
   duplicateGroups,
@@ -9,7 +9,8 @@ import {
   findFamilyGaps,
   readiness,
 } from '../domain/list'
-import type { Item } from '../domain/types'
+import { parseSingleItem } from '../domain/parse'
+import type { CategoryId, Item } from '../domain/types'
 
 /**
  * The list screen: A2 variant D on top (one sentence, naming the single most
@@ -21,11 +22,14 @@ export function Home({
   snapshot,
   camperId,
   onClaim,
+  onAdd,
   onImport,
 }: {
   snapshot: TripSnapshot
   camperId: string
   onClaim: (itemId: string, camperId: string | null) => void
+  /** Anyone may add one Item; only the Organiser may bulk-import. */
+  onAdd: (text: string, categoryId: CategoryId | null, claim: boolean) => void
   /** Absent for everyone but the Organiser — import is a bulk write. */
   onImport?: () => void
 }) {
@@ -126,6 +130,8 @@ export function Home({
         )
       })}
 
+      <AddItem onAdd={onAdd} />
+
       <button className="share" onClick={share}>
         {copied ? 'הועתק — הדביקו בקבוצה' : 'העתקה לוואטסאפ'}
       </button>
@@ -135,6 +141,78 @@ export function Home({
         </button>
       )}
     </div>
+  )
+}
+
+/**
+ * Adding one thing by hand. Two buttons rather than one, because "I'm bringing
+ * this" and "we still need this" are different statements and the app must not
+ * guess which was meant — a Claim is always explicit (ADR-0006).
+ *
+ * The guessed category is shown rather than applied silently, so a wrong guess
+ * is visible and one tap from being corrected.
+ */
+function AddItem({
+  onAdd,
+}: {
+  onAdd: (text: string, categoryId: CategoryId | null, claim: boolean) => void
+}) {
+  const [text, setText] = useState('')
+  const [override, setOverride] = useState<CategoryId | null>(null)
+
+  const guess = useMemo(() => {
+    const trimmed = text.trim()
+    return trimmed ? (parseSingleItem(trimmed)?.categoryId ?? null) : null
+  }, [text])
+
+  const ready = text.trim().length > 0 && guess !== null
+
+  function submit(claim: boolean) {
+    if (!ready) return
+    onAdd(text.trim(), override, claim)
+    setText('')
+    setOverride(null)
+  }
+
+  return (
+    <section className="add-item">
+      <input
+        value={text}
+        onChange={(e) => {
+          setText(e.target.value)
+          setOverride(null)
+        }}
+        placeholder="מה עוד צריך? למשל: 2 ק״ג נקניקיות"
+        aria-label="הוספת פריט"
+      />
+
+      {ready && (
+        <>
+          <label className="add-cat">
+            <span className="muted small">קטגוריה</span>
+            <select
+              value={override ?? guess ?? 'other'}
+              onChange={(e) => setOverride(e.target.value as CategoryId)}
+            >
+              {CATEGORIES.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <div className="add-actions">
+            <button className="claim mine" onClick={() => submit(true)}>
+              אני מביא
+            </button>
+            <button className="ghost" onClick={() => submit(false)}>
+              רק להוסיף לרשימה
+            </button>
+          </div>
+        </>
+      )}
+    </section>
   )
 }
 

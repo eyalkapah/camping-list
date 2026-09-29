@@ -362,3 +362,21 @@ button.danger {
   background: #fdf3f2;
 }
 button.danger:disabled { opacity: 0.45; }
+
+/* Adding one Item by hand. Two verbs, because a Claim is explicit (ADR-0006). */
+.add-item { margin: 18px 0 8px; display: flex; flex-direction: column; gap: 8px; }
+.add-item input {
+  width: 100%; padding: 12px 14px; font-size: 16px; font-family: inherit;
+  border: 1px solid var(--line); border-radius: 10px; background: var(--card);
+  color: inherit; box-sizing: border-box;
+}
+.add-cat { display: flex; align-items: center; gap: 8px; }
+.add-cat select {
+  flex: 1; padding: 8px 10px; font-size: 15px; font-family: inherit;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: inherit;
+}
+.add-actions { display: flex; gap: 8px; }
+.add-actions button { flex: 1; padding: 12px; font-size: 15px; border-radius: 10px; }
+button.ghost {
+  background: transparent; border: 1px solid var(--line); color: inherit; font-family: inherit;
+}

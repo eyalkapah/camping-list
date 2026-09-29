@@ -199,6 +199,27 @@ Measured against the group's message: re-pasting it unchanged adds **0 of 114**;
 version with one new person and one extra line for an existing person adds exactly **3 of 117**,
 and creates exactly one Camper.
 
+### 4.2.3 Adding one Item by hand
+
+Import is a bulk write reserved for the Organiser, so for a while the list could only be filled
+by pasting the group's message. That left no way for a family to say "I'm also bringing a
+watermelon" — the app could reproduce the WhatsApp message but not extend it, which is most of
+the point.
+
+Anyone on the Trip can add a single Item from the bottom of the list screen. The typed line runs
+through **the same parser as the bulk paste** (`parseSingleItem`), so `2 ק״ג נקניקיות` yields the
+same name, quantity and Merge Key either way. This is not tidiness: duplicate detection is keyed
+on the Merge Key, so a second, looser parser here would silently stop matching manual additions
+against imported ones. Measured: adding `2 ק״ג נקניקיות` as ענת immediately flagged `כפול`
+against גילי's identical line, and the duplicate count moved 23 → 24.
+
+The guessed category is **shown, not applied silently**, with a picker next to it. A wrong guess
+is then visible and one tap from being fixed, rather than filing the Item somewhere nobody looks.
+
+Adding offers two buttons, never one: **אני מביא** and **רק להוסיף לרשימה**. "I'm bringing this"
+and "we still need this" are different statements, and a Claim is always explicit (ADR-0006) —
+defaulting either way would put words in someone's mouth.
+
 ### 4.3 Gap detection
 
 Two layers, in this order (ADR-4):

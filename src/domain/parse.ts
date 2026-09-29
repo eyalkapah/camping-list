@@ -494,6 +494,18 @@ function makeSuggestion(
 }
 
 /**
+ * One typed line into one Suggestion, for adding a single Item by hand.
+ *
+ * Deliberately the same code path as the bulk paste: `2 ק״ג נקניקיות` has to
+ * mean the same thing whether it arrives in a WhatsApp message or is typed
+ * into the add box. `settled` is true because a person typing one line has
+ * already decided it is one thing, so the compound `ו` flag would be noise.
+ */
+export function parseSingleItem(text: string): Suggestion | null {
+  return makeSuggestion('manual', '', text, true)
+}
+
+/**
  * The reviewer's explicit split of a `compound` Suggestion. The parser refuses
  * to guess here; this runs only when a human has looked at `צלחות גדולות
  * וקטנות חד״פ` and said yes, that is two things.

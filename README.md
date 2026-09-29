@@ -43,6 +43,14 @@ the group's edited message tops the list up instead of doubling it: the unchange
 message adds 0 of 114 Items, while a version with one new family and one extra
 line adds exactly 3 of 117.
 
+Import is the Organiser's; **adding one thing is everyone's**. There's a box at
+the bottom of the list — type `2 ק״ג נקניקיות`, and the same parser that reads
+the WhatsApp message pulls out the name, the quantity and the category, which is
+shown so a wrong guess is one tap from fixed. Two buttons, not one: **אני מביא**
+or **רק להוסיף לרשימה**, because those are different statements and the app
+shouldn't guess (ADR-0006). Sharing the parser is what lets duplicate detection
+notice that your `נקניקיות` is the same thing as the one already in the message.
+
 To run against the real system of record, create `.env.local`:
 
 ```
